@@ -7,37 +7,61 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.65);
+      --glass-brd: rgba(255,255,255,0.40);
+    }
     body{
       font-family:'Inter',sans-serif;
-      /* พื้นหลังโทนม่วงทั้งเว็บไซต์ */
+      /* พื้นหลังแนว minimal iOS glass */
       background:
-        radial-gradient(1100px 600px at -10% -10%, rgba(124,58,237,.28), transparent 60%),
-        radial-gradient(900px 500px at 110% 0%, rgba(147,51,234,.22), transparent 60%),
-        linear-gradient(180deg, #5b21b6 0%, #6d28d9 50%, #7c3aed 100%);
-      color:#1f2937;
+        radial-gradient(900px 500px at -10% -10%, rgba(14,165,233,.08), transparent 60%),
+        radial-gradient(900px 500px at 110% 0%, rgba(99,102,241,.08), transparent 60%),
+        linear-gradient(180deg, #f7f8fb 0%, #f5f7fb 45%, #eef2f7 100%);
+      color:#0f172a;
     }
     .text-gradient{
-      background:linear-gradient(90deg,#F5F3FF,#E9D5FF);
+      background:linear-gradient(90deg,#0ea5e9,#6366f1);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
     }
-    /* ลบพื้นหลังรูป: ให้ Hero โปร่งใส */
+    /* Glass cards */
+    .card{
+      background:var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border:1px solid var(--glass-brd);
+    }
+    /* Hero ไม่มีพื้นหลังรูป */
     .hero-bg{ background: transparent; }
-    /* การ์ดพื้นหลังขาวให้อ่านง่ายบนพื้นม่วง */
-    .card{ background:#ffffff; }
+
+    /* Countdown tiles */
+    .cd-tile{
+      min-width: 76px;
+      padding: 12px 10px;
+      border-radius: 16px;
+      text-align:center;
+      background: var(--glass-bg);
+      border:1px solid var(--glass-brd);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+    }
+    .cd-value{ font-size: 1.5rem; font-weight: 800; line-height: 1; color:#0f172a;}
+    .cd-label{ font-size: .75rem; color:#475569; margin-top:.25rem; letter-spacing:.02em;}
   </style>
 </head>
 <body>
 
   <!-- Header -->
-  <header class="bg-white/50 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+  <header class="bg-white/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-white/30">
     <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
       <div class="text-xl font-bold text-gradient">RCST 2026</div>
       <div class="hidden md:flex space-x-8 text-sm font-medium">
-        <a href="#about" class="hover:text-blue-50 text-white/90 transition-colors">เกี่ยวกับ</a>
-        <a href="#dates" class="hover:text-blue-50 text-white/90 transition-colors">กำหนดการ</a>
-        <a href="#speakers" class="hover:text-blue-50 text-white/90 transition-colors">หัวข้อ</a>
-        <a href="#venue" class="hover:text-blue-50 text-white/90 transition-colors">สถานที่</a>
+        <a href="#about" class="text-slate-700 hover:text-indigo-600 transition-colors">เกี่ยวกับ</a>
+        <a href="#dates" class="text-slate-700 hover:text-indigo-600 transition-colors">กำหนดการ</a>
+        <a href="#speakers" class="text-slate-700 hover:text-indigo-600 transition-colors">หัวข้อ</a>
+        <a href="#venue" class="text-slate-700 hover:text-indigo-600 transition-colors">สถานที่</a>
       </div>
       <button class="md:hidden p-2 rounded-lg bg-white/70 hover:bg-white" aria-label="Open menu">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,20 +72,32 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero-bg min-h-screen flex flex-col justify-center items-center p-4 text-center text-white">
+  <section class="hero-bg min-h-screen flex flex-col justify-center items-center p-4 text-center">
     <div class="container mx-auto max-w-6xl">
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gradient mb-4">
         งานประชุมราชวิทยาลัยศัลยแพทย์แห่งประเทศไทยส่วนภูมิภาค ประจำปี 2569
       </h1>
-      <p class="text-2xl md:text-3xl font-bold text-white mb-8">
-        <span class="text-white/90">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
+      <p class="text-2xl md:text-3xl font-bold text-slate-800 mb-8">
+        <span class="text-indigo-600">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
       </p>
-      <!-- ปุ่มลงทะเบียน (พฤติกรรมเดิม: เปิดแท็บใหม่) -->
+
+      <!-- ปุ่มลงทะเบียน -->
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSd0NympyKA6xy6dmcS6j4x4sam0pzLO2ebo4IlS2yKQkWkR5g/viewform"
          target="_blank" rel="noopener"
-         class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+         class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
         ลงทะเบียน
       </a>
+
+      <!-- Countdown -->
+      <div class="mt-6 flex items-center justify-center">
+        <div class="flex gap-3" aria-live="polite">
+          <div class="cd-tile"><div id="cd-days" class="cd-value">00</div><div class="cd-label">วัน</div></div>
+          <div class="cd-tile"><div id="cd-hours" class="cd-value">00</div><div class="cd-label">ชั่วโมง</div></div>
+          <div class="cd-tile"><div id="cd-mins" class="cd-value">00</div><div class="cd-label">นาที</div></div>
+          <div class="cd-tile"><div id="cd-secs" class="cd-value">00</div><div class="cd-label">วินาที</div></div>
+        </div>
+      </div>
+      <p id="cd-note" class="mt-2 text-sm text-slate-500"></p>
     </div>
   </section>
 
@@ -70,10 +106,10 @@
     <div class="container mx-auto px-4 max-w-4xl text-center">
       <div class="card rounded-3xl shadow-md p-8 md:p-10">
         <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient">เกี่ยวกับงานประชุม</h2>
-        <p class="text-lg text-gray-700 leading-relaxed">
+        <p class="text-lg text-slate-700 leading-relaxed">
           การประชุม First Announcement of Regional RCST 2026 in Chiang Mai เป็นงานประชุมวิชาการที่รวบรวมผู้เชี่ยวชาญด้านศัลยกรรมจากทั่วภูมิภาค เพื่อแลกเปลี่ยนความรู้และนวัตกรรมล่าสุดในวงการแพทย์
         </p>
-        <p class="text-lg text-gray-700 leading-relaxed mt-4">
+        <p class="text-lg text-slate-700 leading-relaxed mt-4">
           เตรียมพร้อมสำหรับอนาคตของการผ่าตัด ที่ก้าวล้ำด้วยเทคโนโลยีและเทคนิคใหม่ๆ ที่จะมาพลิกโฉมวงการศัลยกรรม
         </p>
       </div>
@@ -89,18 +125,18 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-gray-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-purple-700 mb-4">11 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-gray-700">
+          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+          <h4 class="text-xl font-bold text-indigo-700 mb-4">11 กุมภาพันธ์ 2569</h4>
+          <ul class="list-none space-y-3 text-slate-700">
             <li><span class="font-medium">Complex Benign and Precision UGI Cancer Surgery</span></li>
             <li><span class="font-medium">Colorectal Surgery</span></li>
           </ul>
         </div>
 
         <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-gray-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-blue-700 mb-4">12 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-gray-700">
+          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+          <h4 class="text-xl font-bold text-indigo-700 mb-4">12 กุมภาพันธ์ 2569</h4>
+          <ul class="list-none space-y-3 text-slate-700">
             <li><span class="font-medium">Parallel Session Pediatric Surgery</span></li>
             <li><span class="font-medium">Precision Surgery and Advanced MIS for Upper GI Surgery</span></li>
             <li><span class="font-medium">Revolution of Rectal Cancer Treatment</span></li>
@@ -109,9 +145,9 @@
         </div>
 
         <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-gray-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-blue-700 mb-4">13 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-gray-700">
+          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+          <h4 class="text-xl font-bold text-indigo-700 mb-4">13 กุมภาพันธ์ 2569</h4>
+          <ul class="list-none space-y-3 text-slate-700">
             <li><span class="font-medium">Precision Beyond Breast and Endocrine Surgery</span></li>
             <li><span class="font-medium">Challenges and Solution I Chronic Leg Ulcers</span></li>
             <li><span class="font-medium">Trauma in the Next Generation</span></li>
@@ -120,9 +156,9 @@
         </div>
 
         <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-gray-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-purple-700 mb-4">14 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-gray-700">
+          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+          <h4 class="text-xl font-bold text-indigo-700 mb-4">14 กุมภาพันธ์ 2569</h4>
+          <ul class="list-none space-y-3 text-slate-700">
             <li><span class="font-medium">HBP Surgery</span></li>
             <li><span class="font-medium">Laparoscopic Hernia Repair Workshop</span></li>
           </ul>
@@ -136,32 +172,66 @@
     <div class="container mx-auto px-4 max-w-4xl text-center">
       <div class="card rounded-3xl shadow-md p-8 md:p-10">
         <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">สถานที่จัดงาน</h2>
-        <p class="text-lg text-gray-700 leading-relaxed mb-8">
+        <p class="text-lg text-slate-700 leading-relaxed mb-8">
           โรงแรมเชียงใหม่แกรนด์วิว,
         </p>
-        <!-- ปุ่มลิ้ง Google Maps -->
+        <!-- ปุ่มลิ้ง Google Maps พร้อมไอคอน location -->
         <a href="https://maps.app.goo.gl/CGXYScJWtHfB1tTv7" target="_blank" rel="noopener"
-           class="group block w-full rounded-2xl overflow-hidden shadow-lg ring-1 ring-gray-200 hover:shadow-2xl transition">
-          <div class="bg-gradient-to-r from-purple-700 to-blue-600 h-16 flex items-center justify-center">
-            <span class="text-white font-semibold tracking-wide group-hover:underline">
-              เปิดดูแผนที่บน Google Maps
-            </span>
-          </div>
+           class="inline-flex items-center justify-center w-full gap-2 rounded-2xl px-6 py-4 bg-indigo-600 text-white font-semibold shadow-lg hover:bg-indigo-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18s6-5.686 6-10A6 6 0 104 8c0 4.314 6 10 6 10zm0-8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
+          </svg>
+          เปิดดูแผนที่บน Google Maps
         </a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-black/30 text-white py-8 md:py-12">
+  <footer class="bg-white/50 backdrop-blur-xl text-slate-700 py-8 md:py-12 border-t border-white/40">
     <div class="container mx-auto px-4 text-center">
       <div class="flex flex-col items-center mb-6">
-        <p class="text-2xl font-bold text-white/90">MedCMU</p>
+        <p class="text-2xl font-bold text-slate-800">MedCMU</p>
       </div>
-      <p class="text-sm text-white/80">จัดโดยภาควิชาศัลยศาสตร์ คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
-      <p class="text-xs text-white/60 mt-2">© 2026 Next-Gen Surgery. All rights reserved.</p>
+      <p class="text-sm text-slate-600">จัดโดยภาควิชาศัลยศาสตร์ คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+      <p class="text-xs text-slate-500 mt-2">© 2026 Next-Gen Surgery. All rights reserved.</p>
     </div>
   </footer>
 
-</body>
-</html>
+ <!-- Countdown Script -->
+<script>
+  // === ตั้งวัน/เวลาเริ่มงานที่นี่ ===
+  const EVENT_START_ISO = '2026-02-12T08:00:00+07:00'; // 12 ก.พ. 2569 08:00 ICT
+
+  const pad = (n) => String(n).padStart(2,'0');
+  const nodes = {
+    d: document.getElementById('cd-days'),
+    h: document.getElementById('cd-hours'),
+    m: document.getElementById('cd-mins'),
+    s: document.getElementById('cd-secs'),
+    note: document.getElementById('cd-note')
+  };
+
+  function tick() {
+    const now = new Date().getTime();
+    const target = new Date(EVENT_START_ISO).getTime();
+    let diff = Math.max(0, target - now);
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    diff -= days * 86400000;
+    const hours = Math.floor(diff / (1000*60*60));
+    diff -= hours * 3600000;
+    const mins = Math.floor(diff / (1000*60));
+    diff -= mins * 60000;
+    const secs = Math.floor(diff / 1000);
+
+    nodes.d.textContent = pad(days);
+    nodes.h.textContent = pad(hours);
+    nodes.m.textContent = pad(mins);
+    nodes.s.textContent = pad(secs);
+
+    nodes.note.textContent = (target - now <= 0) ? 'กำลังเริ่มงานวันนี้' : 'เริ่มงานในอีก';
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
