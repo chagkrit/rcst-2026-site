@@ -53,9 +53,9 @@
       <div class="flex items-center gap-3">
         <div class="text-xl font-bold text-gradient">RCST 2026</div>
         <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/RCST.png?raw=1"
-             alt="ตราราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-8 w-auto">
+             alt="ตราราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-11 w-auto">
         <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/surgery.png?raw=1"
-             alt="คณะแพทยศาสตร์ มช. & Surgery CMU" class="h-8 w-auto">
+             alt="คณะแพทยศาสตร์ มช. & Surgery CMU" class="h-11 w-auto">
       </div>
 
       <div class="hidden md:flex space-x-8 text-sm font-medium">
@@ -78,7 +78,8 @@
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gradient mb-4">
         งานประชุมราชวิทยาลัยศัลยแพทย์แห่งประเทศไทยส่วนภูมิภาค ประจำปี 2569
       </h1>
-      <p class="text-2xl md:text-3xl font-bold text-slate-800 mb-8">
+      <!-- ขยับ Next-Gen ลงอีกเล็กน้อย -->
+      <p class="text-2xl md:text-3xl font-bold text-slate-800 mb-8 mt-4 md:mt-6">
         <span class="text-indigo-700">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
       </p>
 
@@ -99,6 +100,20 @@
         </div>
       </div>
       <p id="cd-note" class="mt-2 text-sm text-slate-500"></p>
+    </div>
+  </section>
+
+  <!-- Video (ถัดจากการนับถอยหลัง) -->
+  <section id="intro-video" class="py-8 md:py-12">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <div class="card rounded-3xl shadow-md overflow-hidden">
+        <video
+          src="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1"
+          controls preload="metadata" playsinline class="w-full h-auto" style="max-height:70vh;">
+            เบราว์เซอร์ของคุณไม่รองรับวิดีโอ โปรดดาวน์โหลด
+            <a href="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1">ไฟล์วิดีโอ</a>
+        </video>
+      </div>
     </div>
   </section>
 
@@ -153,7 +168,7 @@
   <!-- Venue -->
   <section id="venue" class="py-16 md:py-24">
     <div class="container mx-auto px-4 max-w-4xl text-center">
-      <div class="card rounded-3xl shadow-md p-8 md:p-10">
+      <div class="card rounded-3xl shadow-md p-8 md:py-10 md:px-10">
         <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">สถานที่จัดงาน</h2>
         <p class="text-lg text-slate-700 leading-relaxed mb-8">
           โรงแรมเชียงใหม่แกรนด์วิว,
@@ -166,6 +181,36 @@
           </svg>
           เปิดดูแผนที่บน Google Maps
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Us (ถัดจากสถานที่จัดงาน) -->
+  <section id="contact" class="py-16 md:py-24">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <div class="card rounded-3xl shadow-md p-8 md:p-10">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient text-center">Contact Us</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- QR -->
+          <div class="flex justify-center">
+            <img
+              src="https://github.com/chagkrit/rcst-2026-site/blob/cc007ddc383e75ac1a1e60ee72c4a6db74228d57/LINE_RCST.png?raw=1"
+              alt="QR Code RCST LINE" class="w-64 h-auto rounded-xl shadow" loading="lazy">
+          </div>
+          <!-- Email -->
+          <div class="text-center md:text-left">
+            <p class="text-slate-700 mb-4">สแกน QR เพื่อติดต่อทีมงาน หรืออีเมลหาเราได้ที่</p>
+            <a href="mailto:rcst40.surgerycmu@gmail.com"
+               class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
+              <!-- ไอคอนอีเมล -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M2.94 6.34A2 2 0 014.86 5h10.28a2 2 0 011.92 1.34l-7.06 4.12-7.06-4.12z"/>
+                <path d="M18 8.22l-6.74 3.93a2 2 0 01-2.52 0L2 8.22V14a2 2 0 002 2h12a2 2 0 002-2V8.22z"/>
+              </svg>
+              rcst40.surgerycmu@gmail.com
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
