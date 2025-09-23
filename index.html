@@ -113,13 +113,13 @@
       border:1px solid currentColor; opacity:.85;
     }
     /* สีตามสาขา */
-    .cat-uppergi     { --cat:#dc2626; }
-    .cat-colorectal  { --cat:#16a34a; }
-    .cat-criticalcare{ --cat:#0891b2; }
-    .cat-hnb         { --cat:#9333ea; }
-    .cat-vascular    { --cat:#2563eb; }
-    .cat-trauma      { --cat:#ea580c; }
-    .cat-hbp         { --cat:#065f46; }
+    .cat-uppergi            { --cat:#dc2626; }
+    .cat-colorectal         { --cat:#16a34a; }
+    .cat-criticalcare       { --cat:#0891b2; }
+    .cat-breast_endocrine   { --cat:#9333ea; } /* แทน hnb */
+    .cat-vascular           { --cat:#2563eb; }
+    .cat-trauma             { --cat:#ea580c; }
+    .cat-hbp                { --cat:#065f46; }
 
     .session h3{ color: var(--cat); }
     .session .badge{ color: var(--cat); background: color-mix(in oklab, var(--cat) 12%, white); border-color: color-mix(in oklab, var(--cat) 55%, white); }
@@ -265,7 +265,7 @@
       </div>
     </section>
 
-    <!-- ========== SPEAKERS / TOPICS (Real time-axis + multi-select filters + ZOOM) ========== -->
+    <!-- ========== SPEAKERS / TOPICS (Real time-axis + multi-select + zoom) ========== -->
     <section class="view" data-route="speakers" aria-label="หัวข้อ" id="view-speakers">
       <div class="py-10">
         <div class="max-w-7xl mx-auto">
@@ -283,7 +283,7 @@
             <button class="chip" data-filter="uppergi">Upper GI</button>
             <button class="chip" data-filter="colorectal">Colorectal</button>
             <button class="chip" data-filter="criticalcare">Critical Care</button>
-            <button class="chip" data-filter="hnb">Breast & Endocrine</button>
+            <button class="chip" data-filter="breast_endocrine">Breast &amp; Endocrine</button>
             <button class="chip" data-filter="vascular">Vascular</button>
             <button class="chip" data-filter="trauma">Trauma</button>
             <button class="chip" data-filter="hbp">HBP</button>
@@ -303,7 +303,6 @@
             <!-- ช่วงเวลา 07:30–18:30 จะวาดด้วย JS -->
             <div class="tl-canvas" id="tl-canvas" style="min-width:1200px">
               <div class="tl-grid" id="tl-grid"></div>
-              <!-- sessions จะถูกวาดโดย JS -->
             </div>
 
             <!-- Scroll hint/buttons -->
@@ -322,7 +321,7 @@
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#dc2626"></span>Upper GI</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#16a34a"></span>Colorectal</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#0891b2"></span>Critical Care</span>
-            <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#9333ea"></span>Breast&Endocrine</span>
+            <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#9333ea"></span>Breast &amp; Endocrine</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#2563eb"></span>Vascular</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#ea580c"></span>Trauma</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#065f46"></span>HBP</span>
@@ -503,7 +502,7 @@
     })();
   </script>
 
-  <!-- Speakers timeline (07:30–18:30 + multi-select + zoom) -->
+  <!-- Speakers timeline (07:30–18:30 + multi-select + zoom + alias mapping) -->
   <script>
     (function(){
       const view = document.getElementById('view-speakers');
@@ -535,7 +534,7 @@
           '16:30–16:50 — D: Delirium & Pain — พญ.ณัฐสุดา (CMU)',
         ]},
         // 13 Feb
-        { day:'2026-02-13', cat:'B&E',         start:'08:30', end:'10:00', title:'Breast&Endocrine Surgery Session', subtitle:'Precision Beyond Breast and Endocrine Surgery', detail:[
+        { day:'2026-02-13', cat:'Breast & Endocrine', start:'08:30', end:'10:00', title:'Breast & Endocrine Surgery Session', subtitle:'Precision Beyond Breast and Endocrine Surgery', detail:[
           '08:30–09:00 — Minimally Invasive Breast & Robotics — พญ.กรวรรณ',
           '09:00–09:30 — ICG for SLN mapping — ผศ.พญ.ปัญจพร (CMU)',
           '09:30–10:00 — Update in Thyroid Cancer — ผศ.นพ.กีรติ (CMU)',
@@ -585,6 +584,21 @@
       const activeCats = new Set(['all']);
       let PX_PER_MIN = PX_DEFAULT;
 
+      // ---------- Permanent alias mapping ----------
+      const CAT_ALIAS = {
+        'b&e': 'breast_endocrine',
+        'breast&endocrine': 'breast_endocrine',
+        'breast_endocrine': 'breast_endocrine',
+        'breast': 'breast_endocrine',
+        'endocrine': 'breast_endocrine',
+        'hnb': 'breast_endocrine' // รองรับโค้ดเก่า
+      };
+      const normalizeCat = (c) => {
+        if (!c) return c;
+        const key = String(c).toLowerCase().replace(/\s+/g,'');
+        return CAT_ALIAS[key] || key; // ถ้าไม่รู้จัก คืนค่า key เดิม (เช่น uppergi)
+      };
+
       // ---------- Utils ----------
       const toMin = (hhmm)=>{ const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
       const clamp = (n,min,max)=>Math.min(max,Math.max(min,n));
@@ -592,35 +606,31 @@
       const dayEndMin   = toMin(DAY_END);
       const MIN_PER_DAY = dayEndMin - dayStartMin; // 07:30–18:30 = 660 นาที
 
-      // อัปเดต label ซูม
       function updateZoomLabel(){
         const scale = (PX_PER_MIN / PX_DEFAULT).toFixed(2).replace(/\.00$/,'');
         zLabel.textContent = `สเกล ${scale}× • ${PX_PER_MIN} px/นาที`;
       }
-
       function preserveScrollDuring(fn){
         const oldW = canvas.getBoundingClientRect().width;
         const center = rail.scrollLeft + rail.clientWidth/2;
-        const rel = oldW ? center / oldW : 0; // 0..1
-        fn(); // ทำงาน (วาดใหม่)
+        const rel = oldW ? center / oldW : 0;
+        fn();
         const newW = canvas.getBoundingClientRect().width;
         rail.scrollLeft = Math.max(0, rel * newW - rail.clientWidth/2);
       }
 
-      // สร้างกริด: เส้นทุก "ชั่วโมงเต็ม" และเส้นเบาๆ ที่ "ครึ่งชั่วโมง"
+      // กริดเวลา (ชั่วโมงเต็ม + ครึ่งชั่วโมง)
       function drawGrid(){
         const width = MIN_PER_DAY * PX_PER_MIN;
         canvas.style.width = width + 'px';
         grid.innerHTML = '';
 
-        // ปัก 07:30 label
         const startLabel = document.createElement('div');
         startLabel.className = 'tl-hour-label';
-        startLabel.style.left = 0 + 'px';
+        startLabel.style.left = '0px';
         startLabel.textContent = DAY_START;
         grid.appendChild(startLabel);
 
-        // เริ่มจากชั่วโมงถัดไป (ปัดขึ้นจาก 07:30 -> 08:00)
         let t = Math.ceil((dayStartMin)/60)*60; // 08:00
         if (t === dayStartMin) t += 60;
 
@@ -638,7 +648,6 @@
           label.textContent = `${String(Math.floor(t/60)).padStart(2,'0')}:00`;
           grid.appendChild(label);
 
-          // เส้นครึ่งชั่วโมงระหว่างชั่วโมงนี้กับถัดไป (ยกเว้นตอนสุดท้ายหากเกิน)
           const half = t + 30;
           if (half < dayEndMin){
             const hx = (half - dayStartMin) * PX_PER_MIN;
@@ -676,7 +685,7 @@
           uppergi:'Upper GI',
           colorectal:'Colorectal',
           criticalcare:'Critical Care',
-          hnb:'HNB',
+          breast_endocrine:'Breast & Endocrine',
           vascular:'Vascular',
           trauma:'Trauma',
           hbp:'HBP'
@@ -690,7 +699,10 @@
         canvas.querySelectorAll('.session').forEach(n=>n.remove());
 
         const showAll = activeCats.has('all') || activeCats.size===0;
-        const list = DATA.filter(d=>d.day===day && (showAll || activeCats.has(d.cat)));
+        const list = DATA.filter(d=>{
+          const cat = normalizeCat(d.cat);
+          return d.day===day && (showAll || activeCats.has(cat));
+        });
 
         const created = [];
         list.forEach(d=>{
@@ -699,13 +711,14 @@
           const w = Math.max(60, (e - s) * PX_PER_MIN);
           const x = (s - dayStartMin) * PX_PER_MIN;
 
+          const normCat = normalizeCat(d.cat);
           const el = document.createElement('article');
-          el.className = `session cat-${d.cat}`;
+          el.className = `session cat-${normCat}`;
           el.style.left = x + 'px';
           el.style.width= w + 'px';
-          el.setAttribute('data-cat', d.cat);
+          el.setAttribute('data-cat', normCat);
           el.innerHTML = `
-            <div class="text-xs text-slate-500">${d.start}–${d.end} • <span class="badge">${labelOf(d.cat)}</span></div>
+            <div class="text-xs text-slate-500">${d.start}–${d.end} • <span class="badge">${labelOf(normCat)}</span></div>
             <h3 class="text-sm md:text-base font-extrabold mt-1">${d.title}</h3>
             <p class="text-xs md:text-sm text-slate-700">${d.subtitle || ''}</p>
             ${d.detail?.length ? `<ul class="mt-2 text-xs md:text-sm text-slate-800 space-y-1">${d.detail.map(li=>`<li>• ${li}</li>`).join('')}</ul>`:''}
@@ -747,6 +760,7 @@
 
       // ---------- Zoom ----------
       function setZoom(px){
+        const clamp = (n,min,max)=>Math.min(max,Math.max(min,n));
         PX_PER_MIN = clamp(px, PX_MIN, PX_MAX);
         updateZoomLabel();
         preserveScrollDuring(()=> renderDay(currentDay));
