@@ -27,6 +27,7 @@
     }
     .card{ background:var(--glass-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border:1px solid var(--glass-brd); }
 
+    /* Flip SPA */
     #stage { position: relative; perspective: 1200px; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); transition: height .35s ease; }
     .view{ position: absolute; inset: 0; padding: 16px 0; opacity: 0; pointer-events: none; transform: rotateY(90deg) scale(.98); transform-origin: 50% 50%; backface-visibility: hidden; will-change: transform, opacity; transition: transform .7s cubic-bezier(.2,.65,.2,1), opacity .35s ease; }
     .view.active{ opacity: 1; pointer-events: auto; transform: rotateY(0deg) scale(1); }
@@ -36,12 +37,14 @@
     .hero-title { margin-bottom: 1rem; }
     .hero-sub   { margin-top: 1rem; margin-bottom: 2rem; }
 
-    .cd-tile{ min-width: 76px; padding: 12px 10px; border-radius: 16px; text-align:center; background: var(--glass-bg); border:1px solid var(--glass-brd); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 8px 24px rgba(15, 23, 42, .06); }
+    /* Countdown */
+    .cd-tile{ min-width: 76px; padding: 12px 10px; border-radius: 16px; text-align:center; background: var(--glass-bg); border:1px solid var(--glass-brd); box-shadow: 0 8px 24px rgba(15, 23, 42, .06); }
     .cd-value{ font-size: 1.5rem; font-weight: 800; line-height: 1; color:#0f172a;}
     .cd-label{ font-size: .75rem; color:#475569; margin-top:.25rem; letter-spacing:.02em;}
     #mobile-menu{ top: var(--header-h); }
 
-    .chip{ display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:9999px; font-size:.875rem; border:1px solid rgba(255,255,255,0.5); background:rgba(255,255,255,.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background .2s ease,color .2s ease,border-color .2s ease; cursor:pointer; user-select:none;}
+    /* Timeline UI */
+    .chip{ display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:9999px; font-size:.875rem; border:1px solid rgba(255,255,255,0.5); background:rgba(255,255,255,.6); backdrop-filter: blur(8px); transition: background .2s,color .2s,border-color .2s; cursor:pointer; user-select:none;}
     .chip[data-active="true"]{ background:#4f46e5; color:#fff; border-color:#4f46e5; }
 
     .tl-viewport{ position:relative; overflow-x:auto; overflow-y:visible; }
@@ -53,10 +56,9 @@
 
     .session{ position:absolute; min-width: 160px; border-radius: 16px; padding: 12px 14px; border:1px solid var(--glass-brd); background:var(--glass-bg); box-shadow: 0 10px 24px rgba(2,6,23,.06); transition: transform .2s ease, box-shadow .2s ease; }
     .session:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(2,6,23,.10); }
-
     .badge{ display:inline-block; font-size:.675rem; padding:.2rem .5rem; border-radius:9999px; border:1px solid currentColor; opacity:.85; }
 
-    /* สีตามสาขา (ใช้รหัสที่ normalize แล้วเท่านั้น) */
+    /* สีตามสาขา (slug) */
     .cat-uppergi          { --cat:#dc2626; }
     .cat-colorectal       { --cat:#16a34a; }
     .cat-criticalcare     { --cat:#0891b2; }
@@ -64,6 +66,7 @@
     .cat-vascular         { --cat:#2563eb; }
     .cat-trauma           { --cat:#ea580c; }
     .cat-hbp              { --cat:#065f46; }
+    .cat-general          { --cat:#334155; } /* พิธี/ปาฐกถา/พัก/อาหารกลางวัน */
 
     .session h3{ color: var(--cat); }
     .session .badge{ color: var(--cat); background: color-mix(in oklab, var(--cat) 12%, white); border-color: color-mix(in oklab, var(--cat) 55%, white); }
@@ -89,11 +92,13 @@
         <a href="#contact"  data-route="contact"  class="text-slate-700 hover:text-indigo-600 transition-colors">ติดต่อ</a>
       </div>
 
+      <!-- mobile -->
       <button id="menu-btn" class="md:hidden p-2 rounded-lg bg-white/70 hover:bg-white" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </nav>
 
+    <!-- mobile panel -->
     <div id="mobile-menu" class="md:hidden hidden fixed inset-x-0 z-40 px-4">
       <div class="mx-auto max-w-2xl rounded-2xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 py-3">
         <a href="#about"    data-route="about"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">เกี่ยวกับ</a>
@@ -105,7 +110,9 @@
     </div>
   </header>
 
+  <!-- Stage -->
   <main id="stage" class="container mx-auto px-4">
+
     <!-- HOME -->
     <section class="view active" data-route="home" aria-label="หน้าแรก">
       <div class="min-h-[calc(100vh-140px)] flex flex-col justify-center items-center text-center">
@@ -115,8 +122,14 @@
         <p class="hero-sub text-2xl md:text-3xl font-bold text-slate-800 mt-4 md:mt-6">
           <span class="text-indigo-700">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
         </p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd0NympyKA6xy6dmcS6j4x4sam0pzLO2ebo4IlS2yKQkWkR5g/viewform" target="_blank" rel="noopener" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-[1.02]">ลงทะเบียน</a>
 
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd0NympyKA6xy6dmcS6j4x4sam0pzLO2ebo4IlS2yKQkWkR5g/viewform"
+           target="_blank" rel="noopener"
+           class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
+          ลงทะเบียน
+        </a>
+
+        <!-- Countdown -->
         <div class="mt-6 flex items-center justify-center">
           <div class="flex gap-3" aria-live="polite">
             <div class="cd-tile"><div id="cd-days" class="cd-value">00</div><div class="cd-label">วัน</div></div>
@@ -128,6 +141,7 @@
         <p id="cd-note" class="mt-2 text-sm text-slate-500"></p>
       </div>
 
+      <!-- วิดีโอ -->
       <section class="py-8 md:py-12">
         <div class="max-w-4xl mx-auto">
           <div class="card rounded-3xl shadow-md overflow-hidden">
@@ -143,57 +157,80 @@
         <div class="max-w-4xl mx-auto text-center">
           <div class="card rounded-3xl shadow-md p-8 md:p-10">
             <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient">เกี่ยวกับงานประชุม</h2>
-            <p class="text-lg text-slate-700 leading-relaxed">การประชุม First Announcement of Regional RCST 2026 in Chiang Mai เป็นงานประชุมวิชาการที่รวบรวมผู้เชี่ยวชาญด้านศัลยกรรมจากทั่วภูมิภาค เพื่อแลกเปลี่ยนความรู้และนวัตกรรมล่าสุดในวงการแพทย์</p>
-            <p class="text-lg text-slate-700 leading-relaxed mt-4">เตรียมพร้อมสำหรับอนาคตของการผ่าตัด ที่ก้าวล้ำด้วยเทคโนโลยีและเทคนิคใหม่ๆ ที่จะมาพลิกโฉมวงการศัลยกรรม</p>
+            <p class="text-lg text-slate-700 leading-relaxed">
+              การประชุม First Announcement of Regional RCST 2026 in Chiang Mai เป็นงานประชุมวิชาการที่รวบรวมผู้เชี่ยวชาญด้านศัลยกรรมจากทั่วภูมิภาค เพื่อแลกเปลี่ยนความรู้และนวัตกรรมล่าสุดในวงการแพทย์
+            </p>
+            <p class="text-lg text-slate-700 leading-relaxed mt-4">
+              เตรียมพร้อมสำหรับอนาคตของการผ่าตัด ที่ก้าวล้ำด้วยเทคโนโลยีและเทคนิคใหม่ๆ ที่จะมาพลิกโฉมวงการศัลยกรรม
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- DATES -->
+    <!-- DATES (เพิ่มพิธีช่วงเช้า + ปรับ HNB -> Breast & Endocrine) -->
     <section class="view" data-route="dates" aria-label="กำหนดการ">
       <div class="py-10">
         <div class="max-w-6xl mx-auto">
           <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">กำหนดการและหัวข้อการประชุม</h2>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- 12 Feb -->
             <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
               <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
               <h4 class="text-xl font-bold text-indigo-700 mb-4">12 กุมภาพันธ์ 2569</h4>
               <ul class="list-none space-y-3 text-slate-700">
-                <li><span class="font-medium">Parallel Session Pediatric Surgery</span></li>
-                <li><span class="font-medium">Precision Surgery and Advanced MIS for Upper GI Surgery</span></li>
-                <li><span class="font-medium">Revolution of Rectal Cancer Treatment</span></li>
-                <li><span class="font-medium">ABCD for Critical Care Monitoring</span></li>
+                <li><span class="font-medium">08:00–08:45 ลงทะเบียน</span></li>
+                <li><span class="font-medium">08:45–09:00 พิธีเปิด</span></li>
+                <li><span class="font-medium">09:00–09:30 ปาฐกถา ศ.นพ.โอกาส พลางกูร</span></li>
+                <li><span class="font-medium">09:30–09:40 พิธีมอบรางวัลศิษย์เก่าศัลยแพทย์เชียงใหม่ดีเด่น</span></li>
+                <li><span class="font-medium">09:40–10:00 ปาฐกถาศิษย์เก่าดีเด่น</span></li>
+                <li><span class="font-medium">10:00–10:30 Coffee Break</span></li>
+
+                <li><span class="font-medium">10:30–12:00 Upper GI Surgery • Precision Surgery and Advanced MIS for Upper GI Surgery</span></li>
+                <li><span class="font-medium">12:00–13:00 Lunch Symposium</span></li>
+                <li><span class="font-medium">13:00–14:30 Colorectal Surgery • Revolution of Rectal Cancer Treatment</span></li>
+                <li><span class="font-medium">14:30–15:00 Coffee Break</span></li>
+                <li><span class="font-medium">15:00–17:00 Surgical Critical Care • ABCD for Critical Care Monitoring</span></li>
               </ul>
             </div>
+
+            <!-- 13 Feb -->
             <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
               <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
               <h4 class="text-xl font-bold text-indigo-700 mb-4">13 กุมภาพันธ์ 2569</h4>
               <ul class="list-none space-y-3 text-slate-700">
-                <li><span class="font-medium">Precision Beyond Breast and Endocrine Surgery</span></li>
-                <li><span class="font-medium">Challenges and Solution in Chronic Leg Ulcers</span></li>
-                <li><span class="font-medium">Trauma in the Next Generation</span></li>
-                <li><span class="font-medium">Mastery Technique of HBP Surgery in Emergency Setting</span></li>
+                <li><span class="font-medium">08:30–10:00 <b>Breast & Endocrine</b> Surgery • Precision Beyond Breast and Endocrine Surgery</span></li>
+                <li><span class="font-medium">10:00–10:30 Coffee Break</span></li>
+                <li><span class="font-medium">10:30–12:00 Vascular Surgery • Challenges & Solution in Chronic Leg Ulcers</span></li>
+                <li><span class="font-medium">12:00–13:00 Lunch Symposium</span></li>
+                <li><span class="font-medium">13:00–14:30 Trauma Surgery • Trauma in the Next Generation</span></li>
+                <li><span class="font-medium">14:30–15:00 Coffee Break</span></li>
+                <li><span class="font-medium">15:00–16:30 HBP Surgery • Mastery Technique of HBP Surgery in Emergency Setting</span></li>
               </ul>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- SPEAKERS / TOPICS -->
+    <!-- TOPICS timeline -->
     <section class="view" data-route="speakers" aria-label="หัวข้อ" id="view-speakers">
       <div class="py-10">
         <div class="max-w-7xl mx-auto">
           <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient text-center">หัวข้อ</h2>
 
+          <!-- Day tabs -->
           <div class="flex items-center justify-center gap-3 mb-4">
             <button class="chip" data-day-btn data-day="2026-02-12" data-active="true">12 ก.พ. 2569</button>
             <button class="chip" data-day-btn data-day="2026-02-13">13 ก.พ. 2569</button>
           </div>
 
+          <!-- Filters -->
           <div class="flex items-center justify-center flex-wrap gap-2 mb-2">
             <button class="chip" data-filter="all" data-active="true">ทั้งหมด</button>
+            <button class="chip" data-filter="general">General / Plenary</button>
             <button class="chip" data-filter="uppergi">Upper GI</button>
             <button class="chip" data-filter="colorectal">Colorectal</button>
             <button class="chip" data-filter="criticalcare">Critical Care</button>
@@ -204,6 +241,7 @@
           </div>
           <p class="text-center text-xs text-slate-500 mb-4">เลือกได้หลายสาขา (แตะซ้ำเพื่อยกเลิก) • ปุ่ม “ทั้งหมด” เพื่อรีเซ็ต</p>
 
+          <!-- Zoom -->
           <div class="flex items-center justify-center gap-2 mb-2">
             <button class="chip" id="zoom-out" aria-label="Zoom out">−</button>
             <button class="chip" id="zoom-1x" aria-label="Reset zoom">รีเซ็ต 1.0×</button>
@@ -211,6 +249,7 @@
             <span id="zoom-label" class="text-xs text-slate-500 ml-2">สเกล 1.0× • 2 px/นาที</span>
           </div>
 
+          <!-- Timeline -->
           <div class="tl-viewport card rounded-2xl p-4">
             <div class="tl-canvas" id="tl-canvas" style="min-width:1200px">
               <div class="tl-grid" id="tl-grid"></div>
@@ -225,7 +264,9 @@
             </div>
           </div>
 
+          <!-- Legend -->
           <div class="mt-4 flex flex-wrap gap-3 justify-center text-sm">
+            <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#334155"></span>General</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#dc2626"></span>Upper GI</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#16a34a"></span>Colorectal</span>
             <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:#0891b2"></span>Critical Care</span>
@@ -245,8 +286,11 @@
           <div class="card rounded-3xl shadow-md p-8 md:py-10 md:px-10">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">สถานที่จัดงาน</h2>
             <p class="text-lg text-slate-700 leading-relaxed mb-8">โรงแรมเชียงใหม่แกรนด์วิว,</p>
-            <a href="https://maps.app.goo.gl/CGXYScJWtHfB1tTv7" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-full gap-2 rounded-2xl px-6 py-4 bg-indigo-600 text-white font-semibold shadow-lg hover:bg-indigo-700 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18s6-5.686 6-10A6 6 0 104 8c0 4.314 6 10 6 10zm0-8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/></svg>
+            <a href="https://maps.app.goo.gl/CGXYScJWtHfB1tTv7" target="_blank" rel="noopener"
+               class="inline-flex items-center justify-center w-full gap-2 rounded-2xl px-6 py-4 bg-indigo-600 text-white font-semibold shadow-lg hover:bg-indigo-700 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18s6-5.686 6-10A6 6 0 104 8c0 4.314 6 10 6 10zm0-8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
+              </svg>
               เปิดดูแผนที่บน Google Maps
             </a>
           </div>
@@ -266,8 +310,12 @@
               </div>
               <div class="text-center md:text-left">
                 <p class="text-slate-700 mb-4">สแกน QR เพื่อติดต่อทีมงาน หรืออีเมลหาเราได้ที่</p>
-                <a href="mailto:rcst40.surgerycmu@gmail.com" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.94 6.34A2 2 0 014.86 5h10.28a2 2 0 011.92 1.34l-7.06 4.12-7.06-4.12z"/><path d="M18 8.22l-6.74 3.93a2 2 0 01-2.52 0L2 8.22V14a2 2 0 002 2h12a2 2 0 002-2V8.22z"/></svg>
+                <a href="mailto:rcst40.surgerycmu@gmail.com"
+                   class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M2.94 6.34A2 2 0 014.86 5h10.28a2 2 0 011.92 1.34l-7.06 4.12-7.06-4.12z"/>
+                    <path d="M18 8.22l-6.74 3.93a2 2 0 01-2.52 0L2 8.22V14a2 2 0 002 2h12a2 2 0 002-2V8.22z"/>
+                  </svg>
                   rcst40.surgerycmu@gmail.com
                 </a>
               </div>
@@ -276,8 +324,10 @@
         </div>
       </div>
     </section>
+
   </main>
 
+  <!-- Footer -->
   <footer class="bg-white/50 backdrop-blur-xl text-slate-700 py-8 md:py-12 border-t border-white/40">
     <div class="container mx-auto px-4 text-center">
       <div class="flex flex-col items-center mb-6">
@@ -293,8 +343,8 @@
     const EVENT_START_ISO = '2026-02-12T08:00:00+07:00';
     const pad = (n) => String(n).padStart(2,'0');
     const nodes = { d:document.getElementById('cd-days'), h:document.getElementById('cd-hours'), m:document.getElementById('cd-mins'), s:document.getElementById('cd-secs'), note:document.getElementById('cd-note') };
-    function tick() {
-      if (!nodes.d) return;
+    function tick(){
+      if(!nodes.d) return;
       const now = Date.now(), target = new Date(EVENT_START_ISO).getTime();
       let diff = Math.max(0, target - now);
       const days = Math.floor(diff/86400000); diff -= days*86400000;
@@ -311,11 +361,16 @@
   <!-- Router + Mobile Menu -->
   <script>
     (function(){
-      const header=document.getElementById('site-header'), stage=document.getElementById('stage'), views=[...document.querySelectorAll('.view')], routes=views.map(v=>v.dataset.route), menuBtn=document.getElementById('menu-btn'), menu=document.getElementById('mobile-menu');
+      const header=document.getElementById('site-header'), stage=document.getElementById('stage');
+      const views=[...document.querySelectorAll('.view')], routes=views.map(v=>v.dataset.route);
+      const menuBtn=document.getElementById('menu-btn'), menu=document.getElementById('mobile-menu');
+
       const setHeaderHeight=()=>{ const h=header?.clientHeight||80; document.documentElement.style.setProperty('--header-h', h+'px'); };
       setHeaderHeight(); addEventListener('resize', setHeaderHeight);
+
       const resizeStageTo=(el)=>{ if(!el) return; const h=Math.max(el.scrollHeight, innerHeight - header.clientHeight); stage.style.height=h+'px'; };
       const getActive=()=>document.querySelector('.view.active');
+
       let isAnimating=false;
       const flipTo=(route,pushHash=true)=>{
         if(isAnimating) return; if(!routes.includes(route)) route='home';
@@ -328,86 +383,114 @@
         let t=setTimeout(done,800); next.addEventListener('transitionend', function te(e){ if(e.propertyName!=='transform') return; next.removeEventListener('transitionend', te); clearTimeout(t); done(); });
         if(pushHash) location.hash='#'+route; dispatchEvent(new CustomEvent('view:changed',{detail:{route}}));
       };
+
       document.addEventListener('click',(e)=>{ const a=e.target.closest('a[data-route]'); if(!a) return; e.preventDefault(); flipTo(a.getAttribute('data-route')||'home'); });
       addEventListener('hashchange',()=>{ const r=(location.hash||'#home').replace('#',''); flipTo(r,false); });
       flipTo((location.hash||'#home').replace('#',''),false);
+
       const toggleMenu=(open)=>{ const willOpen=(typeof open==='boolean')?open:menu.classList.contains('hidden'); menu.classList.toggle('hidden', !willOpen); menuBtn.setAttribute('aria-expanded', String(willOpen)); };
       menuBtn?.addEventListener('click', ()=>toggleMenu());
       menu?.querySelectorAll('a[data-route]').forEach(a=>a.addEventListener('click', ()=>toggleMenu(false)));
       document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') toggleMenu(false); });
-      resizeStageTo(getActive()); addEventListener('resize', ()=>resizeStageTo(getActive())); window.updateStageHeight=()=>resizeStageTo(getActive());
+
+      resizeStageTo(getActive()); addEventListener('resize', ()=>resizeStageTo(getActive()));
+      window.updateStageHeight=()=>resizeStageTo(getActive());
     })();
   </script>
 
-  <!-- Timeline + Filters (ถาวร: slug หมวด) -->
+  <!-- Timeline + Filters (รองรับ alias B&E/HNB -> breast_endocrine) -->
   <script>
     (function(){
       const view = document.getElementById('view-speakers'); if(!view) return;
 
-      /* ---------- DATA (ใส่อะไรก็ได้: Breast & Endocrine / B&E / HNB ฯลฯ) ---------- */
+      /* ===== ข้อมูล timeline แบบตามแกนเวลา (07:30–18:30) =====
+         หมวด general ใส่พิธี/ปาฐกถา/พัก/อาหารเที่ยง
+         ข้อมูล Breast & Endocrine ใช้ชื่อแสดงผลนี้เสมอ (แม้ data เดิมจะเขียน HNB/B&E) */
       const DATA = [
-        { day:'2026-02-12', cat:'UpperGI',      start:'10:30', end:'12:00', title:'Upper GI Surgery Session', subtitle:'Precision Surgery and Advanced MIS for Upper GI Surgery', detail:[
+        // ---------- 12 Feb 2026 ----------
+        { day:'2026-02-12', cat:'General',        start:'08:00', end:'08:45', title:'Registration', subtitle:'ลงทะเบียน' },
+        { day:'2026-02-12', cat:'General',        start:'08:45', end:'09:00', title:'Opening Ceremony', subtitle:'พิธีเปิด' },
+        { day:'2026-02-12', cat:'General',        start:'09:00', end:'09:30', title:'Keynote Lecture', subtitle:'ปาฐกถา ศ.นพ.โอกาส พลางกูร' },
+        { day:'2026-02-12', cat:'General',        start:'09:30', end:'09:40', title:'Award Ceremony', subtitle:'พิธีมอบรางวัลศิษย์เก่าศัลยแพทย์เชียงใหม่ดีเด่น' },
+        { day:'2026-02-12', cat:'General',        start:'09:40', end:'10:00', title:'Distinguished Alumni Lecture', subtitle:'ปาฐกถาศิษย์เก่าดีเด่น' },
+        { day:'2026-02-12', cat:'General',        start:'10:00', end:'10:30', title:'Coffee Break', subtitle:'' },
+
+        { day:'2026-02-12', cat:'Upper GI',       start:'10:30', end:'12:00', title:'Upper GI Surgery Session', subtitle:'Precision Surgery and Advanced MIS for Upper GI Surgery', detail:[
           '10:30–10:45 — POEM vs LHM — ผศ.นพ.ชัยณรงค์ (Siriraj)',
           '10:45–11:00 — ESD for early gastric cancer — รศ.ดร.พญ.สิริกาญจน์ (CMU)',
           '11:00–11:15 — LECS for stomach GIST — ผศ.นพ.มล.พันธุ์ภัทร์ (CMU)',
           '11:00–11:30 — Laparoscopic Gastrectomy — Prof. Tsuyoshi Etoh (Oita, JP)',
           '11:30–12:00 — Robotic Surgery & MIS Landscape — Prof. Koichi Suda (Fujita, JP)',
         ]},
-        { day:'2026-02-12', cat:'Colorectal',   start:'13:00', end:'14:30', title:'Colorectal Surgery Session', subtitle:'Revolution of Rectal Cancer Treatment', detail:[
+        { day:'2026-02-12', cat:'General',        start:'12:00', end:'13:00', title:'Lunch Symposium', subtitle:'' },
+
+        { day:'2026-02-12', cat:'Colorectal',     start:'13:00', end:'14:30', title:'Colorectal Surgery Session', subtitle:'Revolution of Rectal Cancer Treatment: Reframe, Refine and Resection', detail:[
           '13:00–13:15 — MRI of Rectal Cancer — อ.ดร.พญ.อมลยา (CMU)',
-          '13:15–13:30 — RT updates — อ.พญ.ปิยาภัสร์ (CMU)',
-          '13:30–13:45 — TNT systemic updates — ผศ.พญ.ธนิกา (CMU)',
-          '13:45–14:00 — LPLND: When & How — อ.นพ.เอกรินทร์ (CMU)',
-          '14:00–14:15 — Minimally Invasive Rectal Surgery — ผศ.นพ.สุวรรณ (CMU)',
+          '13:15–13:30 — Rectal cancer RT updates — อ.พญ.ปิยภัสร์ (CMU)',
+          '13:30–13:45 — Systemic updates: Total Neoadjuvant Therapy (TNT) — ผศ.พญ.ธนิกา (CMU)',
+          '13:45–14:00 — LPLND in Rectal Cancer: When & How — อ.นพ.เอกรินทร์ (CMU)',
+          '14:00–14:15 — Minimally Invasive Rectal Surgery: Current Status & Future — ผศ.นพ.สุวรรณ (CMU)',
+          '14:15–14:30 — Q&A',
         ]},
-        { day:'2026-02-12', cat:'Critical Care',start:'15:00', end:'17:00', title:'Surgical Critical Care Session', subtitle:'ABCD for Critical Care Monitoring', detail:[
-          '15:00–15:10 — Intro ABCD — ศ.นพ.กวีศักดิ์ (CMU)',
+
+        { day:'2026-02-12', cat:'General',        start:'14:30', end:'15:00', title:'Coffee Break', subtitle:'' },
+
+        { day:'2026-02-12', cat:'Critical Care',  start:'15:00', end:'17:00', title:'Surgical Critical Care Session', subtitle:'ABCD for Critical Care Monitoring', detail:[
+          '15:00–15:10 — Introduction to ABCD — ศ.นพ.กวีศักดิ์ (CMU)',
           '15:10–15:30 — A: Airway & Breathing — พญ.ศรีสุลักษณ์ (CMU)',
           '15:30–15:50 — A: Abdomen & Metabolic — พญ.สุอาภา (KKU)',
           '15:50–16:10 — B: Bleeding & Transfusion — รศ.ดร.พญ.โอสรี (PSU)',
-          '16:10–16:30 — C: Circulation — นพ.อติรุจ (CMU)',
+          '16:10–16:30 — C: Circulation & Hemodynamics — นพ.อติรุจ (CMU)',
           '16:30–16:50 — D: Delirium & Pain — พญ.ณัฐสุดา (CMU)',
+          '16:50–17:00 — Q&A',
         ]},
+
+        // ---------- 13 Feb 2026 ----------
         { day:'2026-02-13', cat:'Breast & Endocrine', start:'08:30', end:'10:00', title:'Breast & Endocrine Surgery Session', subtitle:'Precision Beyond Breast and Endocrine Surgery', detail:[
           '08:30–09:00 — Minimally Invasive Breast & Robotics — พญ.กรวรรณ',
-          '09:00–09:30 — ICG for SLN mapping — ผศ.พญ.ปัญจพร (CMU)',
-          '09:30–10:00 — Update in Thyroid Cancer — ผศ.นพ.กีรติ (CMU)',
+          '09:00–09:30 — ICG for SLN mapping in breast cancer — ผศ.พญ.ปัญจพร (CMU)',
+          '09:30–10:00 — Update in Thyroid Cancer Management — ผศ.นพ.กีรติ (CMU)',
         ]},
-        { day:'2026-02-13', cat:'Vascular',     start:'10:30', end:'12:00', title:'Vascular Surgery Session', subtitle:'Challenges & Solution in Chronic Leg Ulcers', detail:[
-          'Arterial Ulcer & PAD Guideline 2024 — ผศ.นพ.ศุภพงษ์',
-          'Venous Ulcer & Endovenous Result — ศ.นพ.กิตติพันธุ์',
-          'Neuropathic Ulcer — ผศ.นพ.จิราวัฒน์',
+        { day:'2026-02-13', cat:'General',        start:'10:00', end:'10:30', title:'Coffee Break', subtitle:'' },
+
+        { day:'2026-02-13', cat:'Vascular',       start:'10:30', end:'12:00', title:'Vascular Surgery Session', subtitle:'Challenges & Solution in Chronic Leg Ulcers', detail:[
+          'Arterial Ulcer & Update PAD Guideline 2024 — ผศ.นพ.ศุภพงษ์',
+          'Venous Ulcer & Result of Endovenous Treatment — ศ.นพ.กิตติพันธุ์',
+          'Neuropathic Ulcer: Current Concepts & Clinical Innovations — ผศ.นพ.จิราวัฒน์',
           'Wound Dressing & How to Choose — ผศ.นพ.เติมพงษ์',
         ]},
-        { day:'2026-02-13', cat:'Trauma',       start:'13:00', end:'14:30', title:'Trauma Surgery Session', subtitle:'Trauma in the Next Generation', detail:[
+        { day:'2026-02-13', cat:'General',        start:'12:00', end:'13:00', title:'Lunch Symposium', subtitle:'' },
+
+        { day:'2026-02-13', cat:'Trauma',         start:'13:00', end:'14:30', title:'Trauma Surgery Session', subtitle:'Trauma in the Next Generation', detail:[
           'Evidence-based management in pancreatic injury — ธิดารัตน์',
-          'Low Titer Group O Whole Blood — ชลกานต์',
-          'ATLS® 11th Edition Update — โอบเอื้อ',
+          'Initial Trauma Resuscitation: Low Titer Group O Whole Blood — ชลกานต์',
+          'Evolving Trauma Training: ATLS® 11th Edition Update — โอบเอื้อ',
           'Future of REBOA — กำธน',
         ]},
-        { day:'2026-02-13', cat:'HBP',          start:'15:00', end:'16:30', title:'HBP Session', subtitle:'Mastery Technique of HBP Surgery in Emergency', detail:[
+
+        { day:'2026-02-13', cat:'General',        start:'14:30', end:'15:00', title:'Coffee Break', subtitle:'' },
+
+        { day:'2026-02-13', cat:'HBP',            start:'15:00', end:'16:30', title:'HBP Session', subtitle:'Mastery Technique of HBP Surgery in Emergency Setting', detail:[
           'Subtotal Cholecystectomy — อ.นพ.อานุสรณ์ กองก่อ',
           'Acute Pancreatitis: PCD → Necrosectomy — อ.พญ.รุ่งอรุณ นภาอำไพพร',
           'Bleeding in Operative fields — อ.นพ.บรรณ วิทยชำนาญกุล',
           'Case discussion — นพ.สัณหวิชญ์ จันทร์รังสี',
         ]},
-        // ทดสอบ alias เพิ่มเติม: ใส่แบบย่อก็ได้
-        // { day:'2026-02-13', cat:'B&E', start:'10:05', end:'10:20', title:'(Demo alias) B&E short', subtitle:'' },
       ];
 
-      /* ---------- ถาวร: แปลงหมวดให้เหลือรหัสเดียว (slug) ---------- */
+      /* ===== Slug ถาวร: รวม alias (B&E/HNB) ให้เป็น breast_endocrine ===== */
       const slugCat = (raw) => {
         if(!raw) return '';
         let s = String(raw).toLowerCase().normalize('NFKD');
-        s = s.replace(/\s*&\s*/g, '_');   // "breast & endocrine" / "b & e" -> "breast_endocrine"
-        s = s.replace(/\s+/g, '_');       // ช่องว่าง -> _
-        s = s.replace(/[^a-z0-9_]/g, ''); // ตัดอักขระอื่นออก (เช่นเครื่องหมายวรรณยุกต์)
-        // alias ที่พบบ่อย -> เป้าหมายเดียว
-        if (s === 'b_e' || s === 'be' || s === 'hnb' || s === 'breastendocrine') s = 'breast_endocrine';
+        s = s.replace(/\s*&\s*/g, '_');   // "&" -> _
+        s = s.replace(/\s+/g, '_');       // space -> _
+        s = s.replace(/[^a-z0-9_]/g, ''); // strip
+        if (['b_e','be','hnb','breastendocrine'].includes(s)) s = 'breast_endocrine';
         return s;
       };
 
       const CAT_LABEL = {
+        general: 'General / Plenary',
         uppergi: 'Upper GI',
         colorectal: 'Colorectal',
         criticalcare: 'Critical Care',
@@ -417,15 +500,18 @@
         hbp: 'HBP'
       };
 
-      /* ---------- Settings / DOM ---------- */
+      /* ===== Settings / DOM ===== */
       const DAY_START='07:30', DAY_END='18:30', PX_MIN=1, PX_MAX=6, PX_DEFAULT=2;
       const rail=view.querySelector('.tl-viewport'), canvas=view.querySelector('#tl-canvas'), grid=view.querySelector('#tl-grid');
       const dayBtns=view.querySelectorAll('[data-day-btn]'), chips=view.querySelectorAll('[data-filter]');
       const btnL=view.querySelector('#tl-left'), btnR=view.querySelector('#tl-right'), btnNow=view.querySelector('#tl-now');
       const zOut=view.querySelector('#zoom-out'), zIn=view.querySelector('#zoom-in'), z1x=view.querySelector('#zoom-1x'), zLabel=view.querySelector('#zoom-label');
 
-      let currentDay='2026-02-12'; const activeCats=new Set(['all']); let PX_PER_MIN=PX_DEFAULT;
+      let currentDay='2026-02-12';
+      const activeCats=new Set(['all']);
+      let PX_PER_MIN=PX_DEFAULT;
 
+      /* ===== Utils ===== */
       const toMin=(hhmm)=>{ const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
       const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
       const dayStartMin=toMin(DAY_START), dayEndMin=toMin(DAY_END), MIN_PER_DAY=dayEndMin-dayStartMin;
@@ -439,9 +525,12 @@
         let t=Math.ceil(dayStartMin/60)*60; if(t===dayStartMin) t+=60;
         for(; t<=dayEndMin; t+=60){
           const x=(t-dayStartMin)*PX_PER_MIN;
-          const line=document.createElement('div'); line.className='tl-hour'; line.style.left=x+'px'; grid.appendChild(line);
-          const label=document.createElement('div'); label.className='tl-hour-label'; label.style.left=x+'px'; label.textContent=`${String(Math.floor(t/60)).padStart(2,'0')}:00`; grid.appendChild(label);
-          const half=t+30; if(half<dayEndMin){ const hx=(half-dayStartMin)*PX_PER_MIN; const halfLine=document.createElement('div'); halfLine.className='tl-half'; halfLine.style.left=hx+'px'; grid.appendChild(halfLine); }
+          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour', style:`left:${x}px`} ));
+          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour-label', style:`left:${x}px`, textContent:`${String(Math.floor(t/60)).padStart(2,'0')}:00`} ));
+          const half=t+30; if(half<dayEndMin){
+            const hx=(half-dayStartMin)*PX_PER_MIN;
+            grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-half', style:`left:${hx}px`} ));
+          }
         }
       }
 
@@ -456,7 +545,7 @@
         window.updateStageHeight && window.updateStageHeight();
       }
 
-      function labelOf(cat){ return CAT_LABEL[cat] || cat; }
+      const labelOf=(cat)=> CAT_LABEL[cat] || cat;
 
       function renderDay(day){
         currentDay=day;
@@ -495,6 +584,7 @@
         layoutRows(created);
       }
 
+      /* Filters */
       function setAll(active){ activeCats.clear(); if(active) activeCats.add('all'); chips.forEach(c=>c.setAttribute('data-active', String(active && c.dataset.filter==='all'))); }
       function toggleCat(cat){
         if(cat==='all'){ setAll(true); renderDay(currentDay); return; }
@@ -506,20 +596,22 @@
       }
       chips.forEach(chip=> chip.addEventListener('click', ()=> toggleCat(chip.dataset.filter)));
 
+      /* Tabs/Scroll/Zoom */
       dayBtns.forEach(btn=> btn.addEventListener('click', ()=> renderDay(btn.dataset.day)));
-      view.querySelector('#tl-left').addEventListener('click', ()=> rail.scrollBy({left:-400, behavior:'smooth'}));
-      view.querySelector('#tl-right').addEventListener('click',()=> rail.scrollBy({left: 400, behavior:'smooth'}));
-      view.querySelector('#tl-now').addEventListener('click',  ()=> rail.scrollTo({left:0, behavior:'smooth'}));
+      btnL.addEventListener('click', ()=> rail.scrollBy({left:-400,behavior:'smooth'}));
+      btnR.addEventListener('click', ()=> rail.scrollBy({left: 400,behavior:'smooth'}));
+      btnNow.addEventListener('click',()=> rail.scrollTo({left:0,behavior:'smooth'}));
 
       function setZoom(px){ PX_PER_MIN=clamp(px, PX_MIN, PX_MAX); updateZoomLabel(); preserveScrollDuring(()=> renderDay(currentDay)); }
-      view.querySelector('#zoom-out').addEventListener('click', ()=> setZoom(PX_PER_MIN-0.5));
-      view.querySelector('#zoom-in').addEventListener('click',  ()=> setZoom(PX_PER_MIN+0.5));
-      view.querySelector('#zoom-1x').addEventListener('click',  ()=> setZoom(PX_DEFAULT));
+      zOut.addEventListener('click', ()=> setZoom(PX_PER_MIN-0.5));
+      zIn .addEventListener('click', ()=> setZoom(PX_PER_MIN+0.5));
+      z1x .addEventListener('click', ()=> setZoom(PX_DEFAULT));
 
       addEventListener('view:changed', (e)=>{ if(e.detail?.route==='speakers'){ setTimeout(()=>{ preserveScrollDuring(()=> renderDay(currentDay)); }, 50); } });
 
       updateZoomLabel();
       renderDay(currentDay);
+
       rail.addEventListener('scroll', ()=> { window.updateStageHeight && window.updateStageHeight(); });
       addEventListener('resize', ()=> { window.updateStageHeight && window.updateStageHeight(); });
     })();
