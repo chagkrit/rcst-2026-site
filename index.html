@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th" class="scroll-smooth">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,6 +10,7 @@
     :root{
       --glass-bg: rgba(255,255,255,0.70);
       --glass-brd: rgba(255,255,255,0.45);
+      --header-h: 80px; /* จะถูกอัปเดตด้วย JS ให้ตรงความสูงจริง */
     }
     body{
       font-family:'Inter',sans-serif;
@@ -20,9 +21,6 @@
         linear-gradient(180deg, #faf7ff 0%, #f5f0ff 45%, #efe9ff 100%);
       color:#0f172a;
     }
-    /* ให้การเลื่อนด้วย anchor ไม่โดน header บัง */
-    section[id] { scroll-margin-top: 96px; }
-
     .text-gradient{
       background:linear-gradient(90deg,#7c3aed,#2563eb);
       -webkit-background-clip:text;
@@ -34,7 +32,39 @@
       -webkit-backdrop-filter: blur(14px);
       border:1px solid var(--glass-brd);
     }
-    .hero-bg{ background: transparent; }
+
+    /* ===== SPA Flip Stage ===== */
+    #stage {
+      position: relative;
+      perspective: 1200px;
+      margin-top: var(--header-h);
+      min-height: calc(100vh - var(--header-h));
+      transition: height .35s ease;
+    }
+    .view{
+      position: absolute; inset: 0;
+      padding: 16px 0;   /* ให้มีช่องว่างเล็กน้อย */
+      opacity: 0; pointer-events: none;
+      transform: rotateY(90deg) scale(.98);
+      transform-origin: 50% 50%;
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      transition: transform .7s cubic-bezier(.2,.65,.2,1), opacity .35s ease;
+    }
+    .view.active{
+      opacity: 1; pointer-events: auto;
+      transform: rotateY(0deg) scale(1);
+    }
+    .view.flip-out{
+      opacity: 0; transform: rotateY(-90deg) scale(.98);
+    }
+    .view.flip-in{
+      opacity: 1; transform: rotateY(0deg) scale(1);
+    }
+
+    /* Hero ข้างในหน้า Home */
+    .hero-title { margin-bottom: 1rem; }
+    .hero-sub   { margin-top: 1rem; margin-bottom: 2rem; }
 
     /* Countdown tiles */
     .cd-tile{
@@ -45,28 +75,32 @@
     }
     .cd-value{ font-size: 1.5rem; font-weight: 800; line-height: 1; color:#0f172a;}
     .cd-label{ font-size: .75rem; color:#475569; margin-top:.25rem; letter-spacing:.02em;}
+
+    /* เมนูมือถือแผงลอย */
+    #mobile-menu{ top: var(--header-h); }
   </style>
 </head>
 <body>
 
   <!-- Header -->
-  <header class="bg-white/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-white/30">
+  <header id="site-header" class="bg-white/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-white/30">
     <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <!-- ข้อความ RCST + โลโก้ต่อท้ายตามลำดับ -->
-      <div class="flex items-center gap-3">
+      <!-- โลโก้ RCST + รูปต่อท้าย -->
+      <a href="#home" data-route="home" class="flex items-center gap-3">
         <div class="text-xl font-bold text-gradient">RCST 2026</div>
         <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/RCST.png?raw=1"
-             alt="ตราราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-11 w-auto">
+             alt="ตราราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-8 w-auto">
         <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/surgery.png?raw=1"
-             alt="คณะแพทยศาสตร์ มช. & Surgery CMU" class="h-11 w-auto">
-      </div>
+             alt="คณะแพทยศาสตร์ มช. & Surgery CMU" class="h-8 w-auto">
+      </a>
 
       <!-- Desktop nav -->
       <div class="hidden md:flex space-x-8 text-sm font-medium">
-        <a href="#about"    class="text-slate-700 hover:text-indigo-600 transition-colors">เกี่ยวกับ</a>
-        <a href="#dates"    class="text-slate-700 hover:text-indigo-600 transition-colors">กำหนดการ</a>
-        <a href="#speakers" class="text-slate-700 hover:text-indigo-600 transition-colors">หัวข้อ</a>
-        <a href="#venue"    class="text-slate-700 hover:text-indigo-600 transition-colors">สถานที่</a>
+        <a href="#about"    data-route="about"    class="text-slate-700 hover:text-indigo-600 transition-colors">เกี่ยวกับ</a>
+        <a href="#dates"    data-route="dates"    class="text-slate-700 hover:text-indigo-600 transition-colors">กำหนดการ</a>
+        <a href="#speakers" data-route="speakers" class="text-slate-700 hover:text-indigo-600 transition-colors">หัวข้อ</a>
+        <a href="#venue"    data-route="venue"    class="text-slate-700 hover:text-indigo-600 transition-colors">สถานที่</a>
+        <a href="#contact"  data-route="contact"  class="text-slate-700 hover:text-indigo-600 transition-colors">ติดต่อ</a>
       </div>
 
       <!-- Mobile menu button -->
@@ -80,161 +114,181 @@
     <!-- Mobile menu panel -->
     <div id="mobile-menu" class="md:hidden hidden fixed inset-x-0 z-40 px-4">
       <div class="mx-auto max-w-2xl rounded-2xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 py-3">
-        <a href="#about"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">เกี่ยวกับ</a>
-        <a href="#dates"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">กำหนดการ</a>
-        <a href="#speakers" class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">หัวข้อ</a>
-        <a href="#venue"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">สถานที่</a>
+        <a href="#about"    data-route="about"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">เกี่ยวกับ</a>
+        <a href="#dates"    data-route="dates"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">กำหนดการ</a>
+        <a href="#speakers" data-route="speakers" class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">หัวข้อ</a>
+        <a href="#venue"    data-route="venue"    class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">สถานที่</a>
+        <a href="#contact"  data-route="contact"  class="block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg">ติดต่อ</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero-bg min-h-screen flex flex-col justify-center items-center p-4 text-center">
-    <div class="container mx-auto max-w-6xl">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gradient mb-4">
-        งานประชุมราชวิทยาลัยศัลยแพทย์แห่งประเทศไทยส่วนภูมิภาค ประจำปี 2569
-      </h1>
-      <!-- ขยับ Next-Gen ลงอีกเล็กน้อย -->
-      <p class="text-2xl md:text-3xl font-bold text-slate-800 mb-8 mt-4 md:mt-6">
-        <span class="text-indigo-700">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
-      </p>
+  <!-- ===== Stage (Flip SPA Container) ===== -->
+  <main id="stage" class="container mx-auto px-4">
 
-      <!-- ปุ่มลงทะเบียน -->
-      <a href="https://airtable.com/appTIDO3nFD9i7ovK/shryfY81Wj6W3xhFQ"
-         target="_blank" rel="noopener"
-         class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
-        ลงทะเบียน
-      </a>
-
-      <!-- Countdown (12 ก.พ. 2569 08:00 ICT) -->
-      <div class="mt-6 flex items-center justify-center">
-        <div class="flex gap-3" aria-live="polite">
-          <div class="cd-tile"><div id="cd-days" class="cd-value">00</div><div class="cd-label">วัน</div></div>
-          <div class="cd-tile"><div id="cd-hours" class="cd-value">00</div><div class="cd-label">ชั่วโมง</div></div>
-          <div class="cd-tile"><div id="cd-mins" class="cd-value">00</div><div class="cd-label">นาที</div></div>
-          <div class="cd-tile"><div id="cd-secs" class="cd-value">00</div><div class="cd-label">วินาที</div></div>
-        </div>
-      </div>
-      <p id="cd-note" class="mt-2 text-sm text-slate-500"></p>
-    </div>
-  </section>
-
-  <!-- Video (ถัดจากการนับถอยหลัง) -->
-  <section id="intro-video" class="py-8 md:py-12">
-    <div class="container mx-auto px-4 max-w-4xl">
-      <div class="card rounded-3xl shadow-md overflow-hidden">
-        <video
-          src="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1"
-          controls preload="metadata" playsinline class="w-full h-auto" style="max-height:70vh;">
-            เบราว์เซอร์ของคุณไม่รองรับวิดีโอ โปรดดาวน์โหลด
-            <a href="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1">ไฟล์วิดีโอ</a>
-        </video>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="py-16 md:py-24">
-    <div class="container mx-auto px-4 max-w-4xl text-center">
-      <div class="card rounded-3xl shadow-md p-8 md:p-10">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient">เกี่ยวกับงานประชุม</h2>
-        <p class="text-lg text-slate-700 leading-relaxed">
-          การประชุม First Announcement of Regional RCST 2026 in Chiang Mai เป็นงานประชุมวิชาการที่รวบรวมผู้เชี่ยวชาญด้านศัลยกรรมจากทั่วภูมิภาค เพื่อแลกเปลี่ยนความรู้และนวัตกรรมล่าสุดในวงการแพทย์
+    <!-- ========== HOME ========== -->
+    <section class="view active" data-route="home" aria-label="หน้าแรก">
+      <!-- Hero -->
+      <div class="min-h-[calc(100vh-140px)] flex flex-col justify-center items-center text-center">
+        <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl font-extrabold text-gradient">
+          งานประชุมราชวิทยาลัยศัลยแพทย์แห่งประเทศไทยส่วนภูมิภาค ประจำปี 2569
+        </h1>
+        <!-- ขยับ Next-Gen ลงอีกเล็กน้อย -->
+        <p class="hero-sub text-2xl md:text-3xl font-bold text-slate-800 mt-4 md:mt-6">
+          <span class="text-indigo-700">Next-Gen Surgery:</span><br/>Revolutionizing Surgical Practice
         </p>
-        <p class="text-lg text-slate-700 leading-relaxed mt-4">
-          เตรียมพร้อมสำหรับอนาคตของการผ่าตัด ที่ก้าวล้ำด้วยเทคโนโลยีและเทคนิคใหม่ๆ ที่จะมาพลิกโฉมวงการศัลยกรรม
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Dates (เฉพาะ 12–13 ก.พ.) -->
-  <section id="dates" class="py-16 md:py-24">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">
-        กำหนดการและหัวข้อการประชุม
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- 12 Feb -->
-        <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-indigo-700 mb-4">12 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-slate-700">
-            <li><span class="font-medium">Parallel Session Pediatric Surgery</span></li>
-            <li><span class="font-medium">Precision Surgery and Advanced MIS for Upper GI Surgery</span></li>
-            <li><span class="font-medium">Revolution of Rectal Cancer Treatment</span></li>
-            <li><span class="font-medium">ABCD for Critical Care Monitoring</span></li>
-          </ul>
-        </div>
-
-        <!-- 13 Feb -->
-        <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
-          <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
-          <h4 class="text-xl font-bold text-indigo-700 mb-4">13 กุมภาพันธ์ 2569</h4>
-          <ul class="list-none space-y-3 text-slate-700">
-            <li><span class="font-medium">Precision Beyond Breast and Endocrine Surgery</span></li>
-            <li><span class="font-medium">Challenges and Solution I Chronic Leg Ulcers</span></li>
-            <li><span class="font-medium">Trauma in the Next Generation</span></li>
-            <li><span class="font-medium">Mastery Technique of HBP Surgery in Emergency Setting</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Placeholder speakers (คงลิงก์เดิม; ถ้าไม่ใช้สามารถลบได้) -->
-  <section id="speakers" class="py-4"></section>
-
-  <!-- Venue -->
-  <section id="venue" class="py-16 md:py-24">
-    <div class="container mx-auto px-4 max-w-4xl text-center">
-      <div class="card rounded-3xl shadow-md p-8 md:py-10 md:px-10">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">สถานที่จัดงาน</h2>
-        <p class="text-lg text-slate-700 leading-relaxed mb-8">
-          โรงแรมเชียงใหม่แกรนด์วิว,
-        </p>
-        <!-- ปุ่ม Google Maps + ไอคอน location -->
-        <a href="https://maps.app.goo.gl/CGXYScJWtHfB1tTv7" target="_blank" rel="noopener"
-           class="inline-flex items-center justify-center w-full gap-2 rounded-2xl px-6 py-4 bg-indigo-600 text-white font-semibold shadow-lg hover:bg-indigo-700 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M10 18s6-5.686 6-10A6 6 0 104 8c0 4.314 6 10 6 10zm0-8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
-          </svg>
-          เปิดดูแผนที่บน Google Maps
+        <!-- ปุ่มลงทะเบียน -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd0NympyKA6xy6dmcS6j4x4sam0pzLO2ebo4IlS2yKQkWkR5g/viewform"
+           target="_blank" rel="noopener"
+           class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
+          ลงทะเบียน
         </a>
-      </div>
-    </div>
-  </section>
 
-  <!-- Contact Us -->
-  <section id="contact" class="py-16 md:py-24">
-    <div class="container mx-auto px-4 max-w-4xl">
-      <div class="card rounded-3xl shadow-md p-8 md:p-10">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient text-center">Contact Us</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <!-- QR -->
-          <div class="flex justify-center">
-            <img
-              src="https://github.com/chagkrit/rcst-2026-site/blob/cc007ddc383e75ac1a1e60ee72c4a6db74228d57/LINE_RCST.png?raw=1"
-              alt="QR Code RCST LINE" class="w-64 h-auto rounded-xl shadow" loading="lazy">
+        <!-- Countdown -->
+        <div class="mt-6 flex items-center justify-center">
+          <div class="flex gap-3" aria-live="polite">
+            <div class="cd-tile"><div id="cd-days" class="cd-value">00</div><div class="cd-label">วัน</div></div>
+            <div class="cd-tile"><div id="cd-hours" class="cd-value">00</div><div class="cd-label">ชั่วโมง</div></div>
+            <div class="cd-tile"><div id="cd-mins" class="cd-value">00</div><div class="cd-label">นาที</div></div>
+            <div class="cd-tile"><div id="cd-secs" class="cd-value">00</div><div class="cd-label">วินาที</div></div>
           </div>
-          <!-- Email -->
-          <div class="text-center md:text-left">
-            <p class="text-slate-700 mb-4">สแกน QR เพื่อติดต่อทีมงาน หรืออีเมลหาเราได้ที่</p>
-            <a href="mailto:rcst40.surgerycmu@gmail.com"
-               class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
-              <!-- ไอคอนอีเมล -->
+        </div>
+        <p id="cd-note" class="mt-2 text-sm text-slate-500"></p>
+      </div>
+
+      <!-- Video -->
+      <section class="py-8 md:py-12">
+        <div class="max-w-4xl mx-auto">
+          <div class="card rounded-3xl shadow-md overflow-hidden">
+            <video
+              src="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1"
+              controls preload="metadata" playsinline class="w-full h-auto" style="max-height:70vh;">
+                เบราว์เซอร์ของคุณไม่รองรับวิดีโอ โปรดดาวน์โหลด
+                <a href="https://github.com/chagkrit/rcst-2026-site/blob/0ff3f955477dd34ede525bbdd225471795730eda/AjSomjareon.mp4?raw=1">ไฟล์วิดีโอ</a>
+            </video>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ========== ABOUT ========== -->
+    <section class="view" data-route="about" aria-label="เกี่ยวกับงานประชุม">
+      <div class="py-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="card rounded-3xl shadow-md p-8 md:p-10">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient">เกี่ยวกับงานประชุม</h2>
+            <p class="text-lg text-slate-700 leading-relaxed">
+              การประชุม First Announcement of Regional RCST 2026 in Chiang Mai เป็นงานประชุมวิชาการที่รวบรวมผู้เชี่ยวชาญด้านศัลยกรรมจากทั่วภูมิภาค เพื่อแลกเปลี่ยนความรู้และนวัตกรรมล่าสุดในวงการแพทย์
+            </p>
+            <p class="text-lg text-slate-700 leading-relaxed mt-4">
+              เตรียมพร้อมสำหรับอนาคตของการผ่าตัด ที่ก้าวล้ำด้วยเทคโนโลยีและเทคนิคใหม่ๆ ที่จะมาพลิกโฉมวงการศัลยกรรม
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== DATES ========== -->
+    <section class="view" data-route="dates" aria-label="กำหนดการ">
+      <div class="py-10">
+        <div class="max-w-6xl mx-auto">
+          <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">กำหนดการและหัวข้อการประชุม</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- 12 Feb -->
+            <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
+              <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+              <h4 class="text-xl font-bold text-indigo-700 mb-4">12 กุมภาพันธ์ 2569</h4>
+              <ul class="list-none space-y-3 text-slate-700">
+                <li><span class="font-medium">Parallel Session Pediatric Surgery</span></li>
+                <li><span class="font-medium">Precision Surgery and Advanced MIS for Upper GI Surgery</span></li>
+                <li><span class="font-medium">Revolution of Rectal Cancer Treatment</span></li>
+                <li><span class="font-medium">ABCD for Critical Care Monitoring</span></li>
+              </ul>
+            </div>
+            <!-- 13 Feb -->
+            <div class="card rounded-3xl p-6 shadow-md transition-all hover:shadow-xl">
+              <h3 class="text-base font-semibold text-slate-500">วันที่</h3>
+              <h4 class="text-xl font-bold text-indigo-700 mb-4">13 กุมภาพันธ์ 2569</h4>
+              <ul class="list-none space-y-3 text-slate-700">
+                <li><span class="font-medium">Precision Beyond Breast and Endocrine Surgery</span></li>
+                <li><span class="font-medium">Challenges and Solution I Chronic Leg Ulcers</span></li>
+                <li><span class="font-medium">Trauma in the Next Generation</span></li>
+                <li><span class="font-medium">Mastery Technique of HBP Surgery in Emergency Setting</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SPEAKERS (placeholder) ========== -->
+    <section class="view" data-route="speakers" aria-label="หัวข้อ">
+      <div class="py-10">
+        <div class="max-w-4xl mx-auto">
+          <div class="card rounded-3xl shadow-md p-8 md:p-10 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">หัวข้อ</h2>
+            <p class="text-slate-700">กำลังอัปเดตรายชื่อหัวข้อและวิทยากร…</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== VENUE ========== -->
+    <section class="view" data-route="venue" aria-label="สถานที่จัดงาน">
+      <div class="py-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="card rounded-3xl shadow-md p-8 md:py-10 md:px-10">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-gradient">สถานที่จัดงาน</h2>
+            <p class="text-lg text-slate-700 leading-relaxed mb-8">
+              โรงแรมเชียงใหม่แกรนด์วิว,
+            </p>
+            <!-- ปุ่ม Google Maps + ไอคอน location -->
+            <a href="https://maps.app.goo.gl/CGXYScJWtHfB1tTv7" target="_blank" rel="noopener"
+               class="inline-flex items-center justify-center w-full gap-2 rounded-2xl px-6 py-4 bg-indigo-600 text-white font-semibold shadow-lg hover:bg-indigo-700 transition">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path d="M2.94 6.34A2 2 0 014.86 5h10.28a2 2 0 011.92 1.34l-7.06 4.12-7.06-4.12z"/>
-                <path d="M18 8.22l-6.74 3.93a2 2 0 01-2.52 0L2 8.22V14a2 2 0 002 2h12a2 2 0 002-2V8.22z"/>
+                <path fill-rule="evenodd" d="M10 18s6-5.686 6-10A6 6 0 104 8c0 4.314 6 10 6 10zm0-8a2 2 0 110-4 2 2 0 010 4z" clip-rule="evenodd"/>
               </svg>
-              rcst40.surgerycmu@gmail.com
+              เปิดดูแผนที่บน Google Maps
             </a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section class="view" data-route="contact" aria-label="ติดต่อเรา">
+      <div class="py-10">
+        <div class="max-w-4xl mx-auto">
+          <div class="card rounded-3xl shadow-md p-8 md:p-10">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient text-center">Contact Us</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <!-- QR -->
+              <div class="flex justify-center">
+                <img
+                  src="https://github.com/chagkrit/rcst-2026-site/blob/cc007ddc383e75ac1a1e60ee72c4a6db74228d57/LINE_RCST.png?raw=1"
+                  alt="QR Code RCST LINE" class="w-64 h-auto rounded-xl shadow" loading="lazy">
+              </div>
+              <!-- Email -->
+              <div class="text-center md:text-left">
+                <p class="text-slate-700 mb-4">สแกน QR เพื่อติดต่อทีมงาน หรืออีเมลหาเราได้ที่</p>
+                <a href="mailto:rcst40.surgerycmu@gmail.com"
+                   class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
+                  <!-- ไอคอนอีเมล -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M2.94 6.34A2 2 0 014.86 5h10.28a2 2 0 011.92 1.34l-7.06 4.12-7.06-4.12z"/>
+                    <path d="M18 8.22l-6.74 3.93a2 2 0 01-2.52 0L2 8.22V14a2 2 0 002 2h12a2 2 0 002-2V8.22z"/>
+                  </svg>
+                  rcst40.surgerycmu@gmail.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="bg-white/50 backdrop-blur-xl text-slate-700 py-8 md:py-12 border-t border-white/40">
@@ -246,6 +300,8 @@
       <p class="text-xs text-slate-500 mt-2">© 2026 Next-Gen Surgery. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ========= Scripts ========= -->
 
   <!-- Countdown Script -->
   <script>
@@ -262,6 +318,7 @@
     };
 
     function tick() {
+      if (!nodes.d) return; // เฉพาะหน้า home
       const now = new Date().getTime();
       const target = new Date(EVENT_START_ISO).getTime();
       let diff = Math.max(0, target - now);
@@ -284,32 +341,104 @@
     setInterval(tick, 1000);
   </script>
 
-  <!-- Mobile menu script -->
+  <!-- Flip SPA Router + Mobile Menu -->
   <script>
-    (function () {
-      const header = document.querySelector('header');
-      const btn  = document.getElementById('menu-btn');
-      const menu = document.getElementById('mobile-menu');
-      if (!btn || !menu) return;
+    (function(){
+      const header   = document.getElementById('site-header');
+      const stage    = document.getElementById('stage');
+      const views    = Array.from(document.querySelectorAll('.view'));
+      const routes   = views.map(v => v.dataset.route);
+      const menuBtn  = document.getElementById('menu-btn');
+      const menu     = document.getElementById('mobile-menu');
 
-      // ตั้งตำแหน่งเมนูให้เริ่มใต้ header จริง ๆ
-      const placeMenu = () => {
-        const h = header?.clientHeight || 64;
-        menu.style.top = h + 'px';
+      // อัปเดตความสูง header -> ใช้กับ stage marginTop + mobile menu top
+      const setHeaderHeight = () => {
+        const h = header?.clientHeight || 80;
+        document.documentElement.style.setProperty('--header-h', h + 'px');
       };
-      placeMenu();
-      window.addEventListener('resize', placeMenu);
+      setHeaderHeight(); window.addEventListener('resize', setHeaderHeight);
 
-      const toggle = (open) => {
+      // ปรับความสูงของ stage ให้พอดีกับ view ปัจจุบัน (เลี่ยงซ้อน footer)
+      const resizeStageTo = (el) => {
+        if (!el) return;
+        // วัดจาก content จริง (รวมวิดีโอ/การ์ด)
+        const h = Math.max(el.scrollHeight, window.innerHeight - header.clientHeight);
+        stage.style.height = h + 'px';
+      };
+
+      // หา view ปัจจุบัน
+      const getActive = () => document.querySelector('.view.active');
+
+      // สลับหน้าแบบ flip
+      let isAnimating = false;
+      const flipTo = (route, pushHash = true) => {
+        if (isAnimating) return;
+        if (!routes.includes(route)) route = 'home';
+
+        const current = getActive();
+        const next = document.querySelector(`.view[data-route="${route}"]`);
+        if (!next || current === next) { resizeStageTo(next || current); return; }
+
+        isAnimating = true;
+        // เตรียมหน้าใหม่ให้มองเห็นเพื่อคำนวณความสูงและเริ่มแอนิเมชัน
+        next.classList.add('active');
+        next.classList.add('flip-in');
+        current?.classList.add('flip-out');
+
+        // ปิดเมนูมือถือถ้าเปิดอยู่
+        if (menu && !menu.classList.contains('hidden')) toggleMenu(false);
+
+        // ปรับความสูงให้พอดีกับหน้าใหม่
+        resizeStageTo(next);
+
+        const done = () => {
+          current?.classList.remove('active','flip-out');
+          next.classList.remove('flip-in');
+          isAnimating = false;
+        };
+
+        // fallback กันหลุด event
+        let t = setTimeout(done, 800);
+        next.addEventListener('transitionend', function te(e){
+          if (e.propertyName !== 'transform') return;
+          next.removeEventListener('transitionend', te);
+          clearTimeout(t); done();
+        });
+
+        if (pushHash) location.hash = '#' + route;
+      };
+
+      // ระบบนำทางจากลิงก์ (ทั้งเดสก์ท็อป/มือถือ/โลโก้)
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[data-route]');
+        if (!a) return;
+        e.preventDefault();
+        const r = a.getAttribute('data-route') || a.getAttribute('href')?.replace('#','') || 'home';
+        flipTo(r);
+      });
+
+      // รองรับปุ่ม Back/Forward
+      window.addEventListener('hashchange', () => {
+        const r = (location.hash || '#home').replace('#','');
+        flipTo(r, /*pushHash*/false);
+      });
+
+      // เปิดหน้าแรกตาม hash ปัจจุบัน
+      flipTo((location.hash || '#home').replace('#',''), false);
+
+      // ---- Mobile menu ----
+      const toggleMenu = (open) => {
         const willOpen = (typeof open === 'boolean') ? open : menu.classList.contains('hidden');
         menu.classList.toggle('hidden', !willOpen);
-        btn.setAttribute('aria-expanded', String(willOpen));
+        menuBtn.setAttribute('aria-expanded', String(willOpen));
       };
-      btn.addEventListener('click', () => toggle());
+      menuBtn?.addEventListener('click', () => toggleMenu());
+      menu?.querySelectorAll('a[data-route]').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
 
-      // ปิดเมื่อกดลิงก์ & กด Esc
-      menu.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => toggle(false)));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggle(false); });
+      // ตั้งความสูงเริ่มต้น
+      resizeStageTo(getActive());
+      window.addEventListener('resize', () => resizeStageTo(getActive()));
     })();
   </script>
 
