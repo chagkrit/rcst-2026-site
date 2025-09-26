@@ -119,17 +119,24 @@
       transform: scale(1.07); z-index: 30; box-shadow: 0 24px 50px rgba(2,6,23,.18); border-width: 2px;
     }
 
-    /* ===== Flip gallery (แทนวิดีโอ) ===== */
-    .flip-gallery{ position:relative; perspective:1200px; }
-    .flip-slide{
-      position:absolute; inset:0; opacity:0;
-      transform: rotateY(90deg) scale(.98);
-      transform-origin: 50% 50%;
-      transition: transform .7s cubic-bezier(.2,.65,.2,1), opacity .35s ease;
-      backface-visibility: hidden; object-fit:cover;
-    }
-    .flip-slide.active{ opacity:1; transform: rotateY(0deg) scale(1); z-index:2; }
-    .flip-slide.out{ opacity:0; transform: rotateY(-90deg) scale(.98); z-index:1; }
+<!-- Gallery (แทนวิดีโอ) -->
+<section class="py-8 md:py-12">
+  <div class="max-w-4xl mx-auto">
+    <div class="card rounded-3xl shadow-md overflow-hidden">
+      <div class="flip-gallery w-full h-[56vh] md:h-[68vh]">
+        <!-- เดิม 1–7 -->
+        <img class="flip-slide active" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu1.JPG?raw=1"  alt="MedCMU 1" loading="eager">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu2.JPG?raw=1"  alt="MedCMU 2" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu3.JPG?raw=1"  alt="MedCMU 3" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu4.jpg?raw=1"  alt="MedCMU 4" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu5.png?raw=1"  alt="MedCMU 5" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu6.JPG?raw=1"  alt="MedCMU 6" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu7.jpg?raw=1"  alt="MedCMU 7" loading="lazy">
+        <!-- เพิ่มใหม่ 8–11 -->
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu8.JPG?raw=1"  alt="MedCMU 8"  loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu9.JPG?raw=1"  alt="MedCMU 9"  loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu10.JPG?raw=1" alt="MedCMU 10" loading="lazy">
+        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu11.JPG?raw=1" alt="MedCMU 11" loading="lazy">
   </style>
 </head>
 <body>
