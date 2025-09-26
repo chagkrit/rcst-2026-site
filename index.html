@@ -14,7 +14,7 @@
     }
     body{
       font-family:'Inter',sans-serif;
-      /* โทนม่วงอ่อนแบบมินิมอล (iOS glass) */
+      /* โทนม่วงอ่อนแบบ iOS glass */
       background:
         radial-gradient(1200px 600px at -10% -10%, rgba(168,85,247,.10), transparent 55%),
         radial-gradient(900px 450px at 110% 0%, rgba(124,58,237,.08), transparent 55%),
@@ -71,7 +71,19 @@
     /* Mobile menu panel offset */
     #mobile-menu{ top: var(--header-h); }
 
-    /* ===== Timeline styles ===== */
+    /* ===== Flip Gallery ===== */
+    .flip-gallery{ position:relative; width:100%; height:56vh; }
+    @media (min-width: 768px){ .flip-gallery{ height:68vh; } }
+    .flip-gallery .flip-slide{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      opacity:0; transform: rotateY(90deg) scale(.98);
+      backface-visibility:hidden;
+      transition: transform .75s cubic-bezier(.2,.7,.2,1), opacity .35s ease;
+    }
+    .flip-gallery .flip-slide.active{ opacity:1; transform: rotateY(0deg) scale(1); }
+    .flip-gallery .flip-slide.out{ opacity:0; transform: rotateY(-90deg) scale(.98); }
+
+    /* ===== Timeline ===== */
     .chip{
       display:inline-flex; align-items:center; gap:.5rem;
       padding:.5rem .75rem; border-radius:9999px; font-size:.875rem;
@@ -92,16 +104,18 @@
       font-size:.75rem; color:#64748b; white-space:nowrap;
       background:rgba(255,255,255,.7); padding:.1rem .35rem; border-radius:.5rem; border:1px solid rgba(255,255,255,.6);
     }
-
     .session{
-      position:absolute; min-width:160px; border-radius:16px; padding:12px 14px;
+      position:absolute; min-width: 160px;
+      border-radius: 16px; padding: 12px 14px;
       border:1px solid var(--glass-brd); background:var(--glass-bg);
-      box-shadow: 0 10px 24px rgba(2,6,23,.06); transition: transform .2s ease, box-shadow .2s ease;
+      box-shadow: 0 10px 24px rgba(2,6,23,.06);
+      transition: transform .2s ease, box-shadow .2s ease;
     }
     .session:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(2,6,23,.10); }
-
     .badge{ display:inline-block; font-size:.675rem; padding:.2rem .5rem; border-radius:9999px; border:1px solid currentColor; opacity:.85; }
 
+    /* สีหมวด */
+    .cat-general          { --cat:#334155; }
     .cat-uppergi          { --cat:#dc2626; }
     .cat-colorectal       { --cat:#16a34a; }
     .cat-criticalcare     { --cat:#0891b2; }
@@ -109,34 +123,18 @@
     .cat-vascular         { --cat:#2563eb; }
     .cat-trauma           { --cat:#ea580c; }
     .cat-hbp              { --cat:#065f46; }
-    .cat-general          { --cat:#334155; }
     .session h3{ color: var(--cat); }
     .session .badge{ color: var(--cat); background: color-mix(in oklab, var(--cat) 12%, white); border-color: color-mix(in oklab, var(--cat) 55%, white); }
     .session{ border-color: color-mix(in oklab, var(--cat) 45%, white); }
 
+    /* ขยายการ์ดเฉพาะ General/Plenary เมื่อคลิก */
     .session[data-cat="general"]{ cursor: zoom-in; }
     .session[data-cat="general"][data-expanded="true"]{
-      transform: scale(1.07); z-index: 30; box-shadow: 0 24px 50px rgba(2,6,23,.18); border-width: 2px;
+      transform: scale(1.07);
+      z-index: 30;
+      box-shadow: 0 24px 50px rgba(2,6,23,.18);
+      border-width: 2px;
     }
-
-<!-- Gallery (แทนวิดีโอ) -->
-<section class="py-8 md:py-12">
-  <div class="max-w-4xl mx-auto">
-    <div class="card rounded-3xl shadow-md overflow-hidden">
-      <div class="flip-gallery w-full h-[56vh] md:h-[68vh]">
-        <!-- เดิม 1–7 -->
-        <img class="flip-slide active" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu1.JPG?raw=1"  alt="MedCMU 1" loading="eager">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu2.JPG?raw=1"  alt="MedCMU 2" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu3.JPG?raw=1"  alt="MedCMU 3" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu4.jpg?raw=1"  alt="MedCMU 4" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu5.png?raw=1"  alt="MedCMU 5" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu6.JPG?raw=1"  alt="MedCMU 6" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu7.jpg?raw=1"  alt="MedCMU 7" loading="lazy">
-        <!-- เพิ่มใหม่ 8–11 -->
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu8.JPG?raw=1"  alt="MedCMU 8"  loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu9.JPG?raw=1"  alt="MedCMU 9"  loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu10.JPG?raw=1" alt="MedCMU 10" loading="lazy">
-        <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu11.JPG?raw=1" alt="MedCMU 11" loading="lazy">
   </style>
 </head>
 <body>
@@ -144,12 +142,12 @@
   <!-- Header -->
   <header id="site-header" class="bg-white/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 border-b border-white/30">
     <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <!-- โลโก้ RCST + รูปต่อท้าย -->
+      <!-- โลโก้ RCST + ต่อด้วย 3 โลโก้ -->
       <a href="#home" data-route="home" class="flex items-center gap-3">
         <div class="text-xl font-bold text-gradient">RCST 2026</div>
-        <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/RCST.png?raw=1" alt="ตราราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-8 w-auto">
-        <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/surgery.png?raw=1" alt="คณะแพทยศาสตร์ มช. & Surgery CMU" class="h-8 w-auto">
-        <img src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/logo.jpg?raw=1" alt="พันธมิตรงาน RCST" class="h-8 w-auto">
+        <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/RCST.png?raw=1" alt="ราชวิทยาลัยศัลยแพทย์แห่งประเทศไทย" class="h-8 w-auto">
+        <img src="https://github.com/chagkrit/rcst-2026-site/blob/e962eddce38d5880ae976db69232a4f8f7b8acb9/surgery.png?raw=1" alt="Surgery CMU" class="h-8 w-auto">
+        <img src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/logo.jpg?raw=1" alt="MedCMU" class="h-8 w-auto">
       </a>
 
       <!-- Desktop nav -->
@@ -218,14 +216,20 @@
       <section class="py-8 md:py-12">
         <div class="max-w-4xl mx-auto">
           <div class="card rounded-3xl shadow-md overflow-hidden">
-            <div class="flip-gallery w-full h-[56vh] md:h-[68vh]">
-              <img class="flip-slide active" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu1.JPG?raw=1" alt="MedCMU 1" loading="eager">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu2.JPG?raw=1" alt="MedCMU 2" loading="lazy">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu3.JPG?raw=1" alt="MedCMU 3" loading="lazy">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu4.jpg?raw=1" alt="MedCMU 4" loading="lazy">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu5.png?raw=1" alt="MedCMU 5" loading="lazy">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu6.JPG?raw=1" alt="MedCMU 6" loading="lazy">
-              <img class="flip-slide" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu7.jpg?raw=1" alt="MedCMU 7" loading="lazy">
+            <div class="flip-gallery">
+              <!-- 1–7 ชุดเดิม -->
+              <img class="flip-slide active" src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu1.JPG?raw=1"  alt="MedCMU 1"  loading="eager">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu2.JPG?raw=1"  alt="MedCMU 2"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu3.JPG?raw=1"  alt="MedCMU 3"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu4.jpg?raw=1"  alt="MedCMU 4"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu5.png?raw=1"  alt="MedCMU 5"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu6.JPG?raw=1"  alt="MedCMU 6"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/64bea96e01b4aec649ae858f68ee272be3d7c96e/Medcmu7.jpg?raw=1"  alt="MedCMU 7"  loading="lazy">
+              <!-- 8–11 ใหม่ -->
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu8.JPG?raw=1"   alt="MedCMU 8"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu9.JPG?raw=1"   alt="MedCMU 9"  loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu10.JPG?raw=1"  alt="MedCMU 10" loading="lazy">
+              <img class="flip-slide"        src="https://github.com/chagkrit/rcst-2026-site/blob/32504c466ce38cd4895e8c72a44e97ca6b7719af/medcmu11.JPG?raw=1"  alt="MedCMU 11" loading="lazy">
             </div>
           </div>
         </div>
@@ -291,7 +295,7 @@
       </div>
     </section>
 
-    <!-- ========== SPEAKERS / TOPICS (timeline จริง + multi-select + zoom + expand General) ========== -->
+    <!-- ========== SPEAKERS / TOPICS (Timeline จริง + ฟิลเตอร์) ========== -->
     <section class="view" data-route="speakers" aria-label="หัวข้อ" id="view-speakers">
       <div class="py-10">
         <div class="max-w-7xl mx-auto">
@@ -330,8 +334,6 @@
             <div class="tl-canvas" id="tl-canvas" style="min-width:1200px">
               <div class="tl-grid" id="tl-grid"></div>
             </div>
-
-            <!-- Scroll hint/buttons -->
             <div class="flex items-center justify-between mt-3">
               <span class="text-xs text-slate-500">เลื่อนซ้าย-ขวาเพื่อดูช่วงเวลาอื่น ๆ</span>
               <div class="flex gap-2">
@@ -418,8 +420,9 @@
 
   <!-- ========= Scripts ========= -->
 
-  <!-- Countdown -->
+  <!-- Countdown Script -->
   <script>
+    // เริ่มงานหลัก 12 ก.พ. 2569 เวลา 08:00 (ICT)
     const EVENT_START_ISO = '2026-02-12T08:00:00+07:00';
     const pad = (n) => String(n).padStart(2,'0');
     const nodes = {
@@ -445,7 +448,7 @@
     tick(); setInterval(tick, 1000);
   </script>
 
-  <!-- Router + Mobile Menu -->
+  <!-- Flip SPA Router + Mobile Menu -->
   <script>
     (function(){
       const header   = document.getElementById('site-header');
@@ -526,7 +529,7 @@
     })();
   </script>
 
-  <!-- Flip gallery logic -->
+  <!-- Flip Gallery Logic (2s/ภาพ วนลูป) -->
   <script>
     (function(){
       const gallery = document.querySelector('.flip-gallery'); if(!gallery) return;
@@ -545,25 +548,24 @@
     })();
   </script>
 
-  <!-- ======= SPEAKERS TIMELINE SCRIPT (07:30–18:30 + multi-select + zoom + expand General) ======= -->
+  <!-- Timeline + Filters (แกนเวลาจริง + multi-select + zoom; ไม่มี coffee/lunch ใน timeline; ขยาย General) -->
   <script>
     (function(){
       const view = document.getElementById('view-speakers'); if(!view) return;
 
-      /* === DATA (ไม่มี Coffee/Lunch ใน timeline) === */
+      /* ===== DATA (ไม่มี Coffee/Lunch ใน timeline) ===== */
       const DATA = [
-        // ---------- 12 Feb 2026: General / Plenary ----------
+        // ---------- 12 Feb 2026 ----------
         { day:'2026-02-12', cat:'General',  start:'08:00', end:'08:45', title:'Registration', subtitle:'ลงทะเบียน' },
         { day:'2026-02-12', cat:'General',  start:'08:45', end:'09:00', title:'Opening Ceremony', subtitle:'พิธีเปิด' },
         { day:'2026-02-12', cat:'General',  start:'09:00', end:'09:30', title:'Keynote Lecture', subtitle:'ปาฐกถา ศ.นพ.โอกาส พลางกูร' },
         { day:'2026-02-12', cat:'General',  start:'09:30', end:'09:40', title:'Award Ceremony', subtitle:'พิธีมอบรางวัลศิษย์เก่าศัลยแพทย์เชียงใหม่ดีเด่น' },
         { day:'2026-02-12', cat:'General',  start:'09:40', end:'10:00', title:'Distinguished Alumni Lecture', subtitle:'ปาฐกถาศิษย์เก่าดีเด่น' },
 
-        // ---------- 12 Feb: Sessions ----------
         { day:'2026-02-12', cat:'Upper GI', start:'10:30', end:'12:00', title:'Upper GI Surgery Session', subtitle:'Precision Surgery and Advanced MIS for Upper GI Surgery', detail:[
           '10:30–10:45 — POEM vs LHM — ผศ.นพ.ชัยณรงค์ พลานุสิตเทพา (Siriraj)',
           '10:45–11:00 — ESD for early gastric cancer — รศ.ดร.พญ.สิริกาญจน์ ลิมปกาญจน์ (CMU)',
-          '11:00–11:15 — LECS for stomach GIST — ผศ.นพ.ม.พันธุ์ภัทร์ จักรพันธุ์ (CMU)',
+          '11:00–11:15 — LECS for stomach GIST — ผศ.นพ.มล.พันธุ์ภัทร์ จักรพันธุ์ (CMU)',
           '11:00–11:30 — Laparoscopic Gastrectomy — Prof. Tsuyoshi Etoh (Oita, JP)',
           '11:30–12:00 — Robotic Surgery & MIS Landscape — Prof. Koichi Suda (Fujita, JP)',
         ]},
@@ -598,7 +600,7 @@
           'Arterial Ulcer & Update PAD Guideline 2024 — ผศ.นพ.ศุภพงษ์ อาวรณ์',
           'Venous Ulcer & Result of Endovenous Treatment — ศ.นพ.กิตติพันธุ์ ฤกษ์เกษม',
           'Neuropathic Ulcer — ผศ.นพ.จิราวัฒน์ แสงสิน',
-          'Wound Dressing & How to Choose — ผศ.นพ.เติมพงษ์ เรียนแพง',
+          'Wound Dressing & How to Choose — ผศ.นพ.เติมพงษ เรียนแพง',
         ]},
 
         { day:'2026-02-13', cat:'Trauma', start:'13:00', end:'14:30', title:'Trauma Surgery Session', subtitle:'Trauma in the Next Generation', detail:[
@@ -616,7 +618,7 @@
         ]},
       ];
 
-      /* === Slug/Alias ให้ Upper GI & Critical Care กรองเจอแน่นอน === */
+      /* ===== Alias/Normalize สำหรับกรองให้เจอแน่ ๆ ===== */
       const CAT_ALIASES = {
         uppergi: ['upper gi','ugi','upper gastrointestinal','upper-g i','upper_gi'],
         colorectal: ['colorectal','colon rectal','colon & rectal'],
@@ -654,11 +656,9 @@
         trauma: 'Trauma',
         hbp: 'HBP'
       };
-
-      // เติม slug ล่วงหน้า
       const NDATA = DATA.map(d => ({ ...d, catSlug: toSlug(d.cat) }));
 
-      /* === Settings / DOM === */
+      /* ===== Settings / DOM ===== */
       const DAY_START='07:30', DAY_END='18:30', PX_MIN=1, PX_MAX=6, PX_DEFAULT=2;
       const rail=view.querySelector('.tl-viewport'), canvas=view.querySelector('#tl-canvas'), grid=view.querySelector('#tl-grid');
       const dayBtns=view.querySelectorAll('[data-day-btn]'), chips=view.querySelectorAll('[data-filter]');
@@ -668,47 +668,35 @@
       let currentDay='2026-02-12';
       const activeCats=new Set(['all']);
       let PX_PER_MIN=PX_DEFAULT;
-      let expandedGeneral=null;
+      let expandedGeneral = null;
 
-      /* === Utils === */
+      /* ===== Utils ===== */
       const toMin=(hhmm)=>{ const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
       const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
       const dayStartMin=toMin(DAY_START), dayEndMin=toMin(DAY_END), MIN_PER_DAY=dayEndMin-dayStartMin;
 
       function updateZoomLabel(){ const scale=(PX_PER_MIN/PX_DEFAULT).toFixed(2).replace(/\.00$/,''); zLabel.textContent=`สเกล ${scale}× • ${PX_PER_MIN} px/นาที`; }
-      function preserveScrollDuring(fn){
-        const oldW=canvas.getBoundingClientRect().width;
-        const center=rail.scrollLeft + rail.clientWidth/2;
-        const rel=oldW?center/oldW:0;
-        fn();
-        const newW=canvas.getBoundingClientRect().width;
-        rail.scrollLeft=Math.max(0, rel*newW - rail.clientWidth/2);
-      }
+      function preserveScrollDuring(fn){ const oldW=canvas.getBoundingClientRect().width; const center=rail.scrollLeft + rail.clientWidth/2; const rel=oldW?center/oldW:0; fn(); const newW=canvas.getBoundingClientRect().width; rail.scrollLeft=Math.max(0, rel*newW - rail.clientWidth/2); }
 
-      /* === Grid === */
+      /* ===== Grid ===== */
       function drawGrid(){
         const width=MIN_PER_DAY*PX_PER_MIN; canvas.style.width=width+'px'; grid.innerHTML='';
         const startLabel=document.createElement('div'); startLabel.className='tl-hour-label'; startLabel.style.left='0px'; startLabel.textContent=DAY_START; grid.appendChild(startLabel);
         let t=Math.ceil(dayStartMin/60)*60; if(t===dayStartMin) t+=60;
         for(; t<=dayEndMin; t+=60){
           const x=(t-dayStartMin)*PX_PER_MIN;
-          const hour=document.createElement('div'); hour.className='tl-hour'; hour.style.left=x+'px'; grid.appendChild(hour);
-          const label=document.createElement('div'); label.className='tl-hour-label'; label.style.left=x+'px'; label.textContent=`${String(Math.floor(t/60)).padStart(2,'0')}:00`; grid.appendChild(label);
-          const half=t+30; if(half<dayEndMin){ const hx=(half-dayStartMin)*PX_PER_MIN; const halfLine=document.createElement('div'); halfLine.className='tl-half'; halfLine.style.left=hx+'px'; grid.appendChild(halfLine); }
+          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour', style:`left:${x}px`} ));
+          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour-label', style:`left:${x}px`, textContent:`${String(Math.floor(t/60)).padStart(2,'0')}:00`} ));
+          const half=t+30; if(half<dayEndMin){ const hx=(half-dayStartMin)*PX_PER_MIN; grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-half', style:`left:${hx}px`} )); }
         }
       }
 
-      /* === Layout (หลบชน) === */
+      /* ===== Layout หลบชน ===== */
       const ROW_HEIGHT=140;
       function layoutRows(cards){
-        const layers=[];
-        cards.forEach(card=>{
+        const layers=[]; cards.forEach(card=>{
           const startX=parseFloat(card.style.left), endX=startX+parseFloat(card.style.width);
-          let row=0;
-          while(true){
-            if(!layers[row]||layers[row]<=startX){ layers[row]=endX+12; break; }
-            row++;
-          }
+          let row=0; while(true){ if(!layers[row]||layers[row]<=startX){ layers[row]=endX+12; break; } row++; }
           card.style.top=(row*ROW_HEIGHT+30)+'px';
         });
         canvas.style.height=((layers.length||1)*ROW_HEIGHT+60)+'px';
@@ -717,11 +705,13 @@
 
       const labelOf=(slug)=> CAT_LABEL[slug] || slug;
 
-      /* === Expand เฉพาะ General/Plenary === */
+      /* ===== Expand เฉพาะ General ===== */
       function attachGeneralExpandHandlers(nodes){
         nodes.filter(n=>n.dataset.cat==='general').forEach(el=>{
           el.addEventListener('click', ()=>{
-            if(expandedGeneral && expandedGeneral!==el){ expandedGeneral.removeAttribute('data-expanded'); }
+            if(expandedGeneral && expandedGeneral!==el){
+              expandedGeneral.removeAttribute('data-expanded');
+            }
             const isNow = el.getAttribute('data-expanded')==='true';
             el.setAttribute('data-expanded', String(!isNow));
             expandedGeneral = (!isNow) ? el : null;
@@ -730,7 +720,7 @@
         });
       }
 
-      /* === Render === */
+      /* ===== Render ===== */
       function renderDay(day){
         currentDay=day; expandedGeneral=null;
         dayBtns.forEach(b=>b.setAttribute('data-active', String(b.dataset.day===day)));
@@ -766,7 +756,7 @@
         attachGeneralExpandHandlers(created);
       }
 
-      /* === Filters === */
+      /* ===== Filters ===== */
       function setAll(active){ activeCats.clear(); if(active) activeCats.add('all'); chips.forEach(c=>c.setAttribute('data-active', String(active && c.dataset.filter==='all'))); }
       function toggleCat(cat){
         if(cat==='all'){ setAll(true); renderDay(currentDay); return; }
@@ -778,7 +768,7 @@
       }
       chips.forEach(chip=> chip.addEventListener('click', ()=> toggleCat(chip.dataset.filter)));
 
-      /* === Tabs/Scroll/Zoom === */
+      /* ===== Tabs/Scroll/Zoom ===== */
       dayBtns.forEach(btn=> btn.addEventListener('click', ()=> renderDay(btn.dataset.day)));
       btnL.addEventListener('click', ()=> rail.scrollBy({left:-400,behavior:'smooth'}));
       btnR.addEventListener('click', ()=> rail.scrollBy({left: 400,behavior:'smooth'}));
