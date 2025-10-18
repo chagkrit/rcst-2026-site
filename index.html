@@ -342,7 +342,7 @@
               <div class="p-5 rounded-2xl border border-white/50 bg-white/70">
                 <h3 class="text-xl font-bold mb-2">ลิงก์โรงแรมใกล้เคียง The Empress</h3>
                 <p class="text-slate-700 mb-3">ดูตัวเลือกที่พักเพิ่มเติมบริเวณใกล้สถานที่จัดงาน</p>
-                <a href="https://www.canva.com/design/DAGzZDtKdWo/no1mGtpCCWxE-UxW_dcD1g/edit?utm_content=DAGzZDtKdWo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">เปิดลิงก์โรงแรมใกล้เคียง</a>
+                <a href="https://www.canva.com/design/DAGzY7NLL3I/lh8TngAwhk6vD8hcBj9gFA/edit?utm_content=DAGzY7NLL3I&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">เปิดลิงก์โรงแรมใกล้เคียง</a>
               </div>
             </div>
           </div>
@@ -358,7 +358,7 @@
             <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gradient text-center">ส่งผลงานวิจัย (Abstract)</h2>
             <ul class="list-disc pl-6 space-y-2 text-slate-700">
               <li>กำหนดส่ง Abstract Form: <b>1 ตุลาคม 2568 – 30 ธันวาคม 2568</b></li>
-              <li>ส่งผ่านแบบฟอร์มออนไลน์: <a class="text-indigo-700 underline" target="_blank" rel="noopener" href="https://forms.gle/5LTtnsVhSQprH3XU9">https://forms.gle/5LTtnsVhSQprH3XU9</a></li>
+              
               <li>หลังส่งเรียบร้อย หน่วยวิจัยจะแจ้ง <b>ลำดับการนำเสนอทาง E‑mail ภายในวันที่ 16 มกราคม 2569</b></li>
               <li>หากไม่ได้รับ E‑mail โปรดติดต่อ: <a href="mailto:rcst40.surgerycmu@gmail.com" class="underline">rcst40.surgerycmu@gmail.com</a> หรือ โทร. <span class="whitespace-nowrap">053-936132</span></li>
             </ul>
@@ -615,158 +615,4 @@
 
       /* ===== Alias/Normalize สำหรับกรองให้เจอแน่ ๆ ===== */
       const CAT_ALIASES = {
-        uppergi: ['upper gi','ugi','upper gastrointestinal','upper-g i','upper_gi'],
-        colorectal: ['colorectal','colon rectal','colon & rectal'],
-        criticalcare: ['critical care','surgical critical care','critical-care','icu','scc'],
-        breast_endocrine: ['breast & endocrine','breast and endocrine','b&e','be','hnb','breastendocrine'],
-        vascular: ['vascular'],
-        trauma: ['trauma'],
-        hbp: ['hbp','hpb','hepatopancreatobiliary'],
-        general: ['general','plenary','ceremony','opening','award','keynote','alumni lecture','workshop']
-      };
-      function toSlug(raw){
-        if(!raw) return '';
-        const clean = String(raw).toLowerCase().normalize('NFKD').replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
-        for (const [slug, arr] of Object.entries(CAT_ALIASES)){
-          for (const a of arr){
-            const re = new RegExp('\\b'+a.replace(/\s+/g,'\\s*')+'\\b','i');
-            if (re.test(clean)) return slug;
-          }
-        }
-        if (/\bupper\b\s*gi\b/.test(clean)) return 'uppergi';
-        if (/\bcritical\b\s*care\b/.test(clean)) return 'criticalcare';
-        return clean.replace(/\s+/g,'_');
-      }
-      const CAT_LABEL = { general:'General / Plenary', uppergi:'Upper GI', colorectal:'Colorectal', criticalcare:'Critical Care', breast_endocrine:'Breast & Endocrine', vascular:'Vascular', trauma:'Trauma', hbp:'HBP' };
-      const NDATA = DATA.map(d => ({ ...d, catSlug: toSlug(d.cat) }));
-
-      /* ===== Settings / DOM ===== */
-      const DAY_START='07:30', DAY_END='18:30', PX_MIN=1, PX_MAX=6, PX_DEFAULT=2;
-      const rail=view.querySelector('.tl-viewport'), canvas=view.querySelector('#tl-canvas'), grid=view.querySelector('#tl-grid');
-      const dayBtns=view.querySelectorAll('[data-day-btn]'), chips=view.querySelectorAll('[data-filter]');
-      const btnL=view.querySelector('#tl-left'), btnR=view.querySelector('#tl-right'), btnNow=view.querySelector('#tl-now');
-      const zOut=view.querySelector('#zoom-out'), zIn=view.querySelector('#zoom-in'), z1x=view.querySelector('#zoom-1x'), zLabel=view.querySelector('#zoom-label');
-
-      let currentDay='2026-02-12';
-      const activeCats=new Set(['all']);
-      let PX_PER_MIN=PX_DEFAULT;
-      let expandedGeneral = null;
-
-      /* ===== Utils ===== */
-      const toMin=(hhmm)=>{ const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
-      const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
-      const dayStartMin=toMin(DAY_START), dayEndMin=toMin(DAY_END), MIN_PER_DAY=dayEndMin-dayStartMin;
-
-      function updateZoomLabel(){ const scale=(PX_PER_MIN/PX_DEFAULT).toFixed(2).replace(/\.00$/,''); zLabel.textContent=`สเกล ${scale}× • ${PX_PER_MIN} px/นาที`; }
-      function preserveScrollDuring(fn){ const oldW=canvas.getBoundingClientRect().width; const center=rail.scrollLeft + rail.clientWidth/2; const rel=oldW?center/oldW:0; fn(); const newW=canvas.getBoundingClientRect().width; rail.scrollLeft=Math.max(0, rel*newW - rail.clientWidth/2); }
-
-      /* ===== Grid ===== */
-      function drawGrid(){
-        const width=MIN_PER_DAY*PX_PER_MIN; canvas.style.width=width+'px'; grid.innerHTML='';
-        const startLabel=document.createElement('div'); startLabel.className='tl-hour-label'; startLabel.style.left='0px'; startLabel.textContent=DAY_START; grid.appendChild(startLabel);
-        let t=Math.ceil(dayStartMin/60)*60; if(t===dayStartMin) t+=60;
-        for(; t<=dayEndMin; t+=60){
-          const x=(t-dayStartMin)*PX_PER_MIN;
-          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour', style:`left:${x}px`} ));
-          grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-hour-label', style:`left:${x}px`, textContent:`${String(Math.floor(t/60)).padStart(2,'0')}:00`} ));
-          const half=t+30; if(half<dayEndMin){ const hx=(half-dayStartMin)*PX_PER_MIN; grid.appendChild(Object.assign(document.createElement('div'), {className:'tl-half', style:`left:${hx}px`} )); }
-        }
-      }
-
-      /* ===== Layout หลบชน ===== */
-      const ROW_HEIGHT=140;
-      function layoutRows(cards){
-        const layers=[]; cards.forEach(card=>{
-          const startX=parseFloat(card.style.left), endX=startX+parseFloat(card.style.width);
-          let row=0; while(true){ if(!layers[row]||layers[row]<=startX){ layers[row]=endX+12; break; } row++; }
-          card.style.top=(row*ROW_HEIGHT+30)+'px';
-        });
-        canvas.style.height=((layers.length||1)*ROW_HEIGHT+60)+'px';
-        window.updateStageHeight && window.updateStageHeight();
-      }
-
-      const labelOf=(slug)=> CAT_LABEL[slug] || slug;
-
-      /* ===== Expand เฉพาะ General ===== */
-      function attachGeneralExpandHandlers(nodes){
-        nodes.filter(n=>n.dataset.cat==='general').forEach(el=>{
-          el.addEventListener('click', ()=>{
-            if(expandedGeneral && expandedGeneral!==el){ expandedGeneral.removeAttribute('data-expanded'); }
-            const isNow = el.getAttribute('data-expanded')==='true';
-            el.setAttribute('data-expanded', String(!isNow));
-            expandedGeneral = (!isNow) ? el : null;
-          });
-          el.title = 'คลิกเพื่อขยาย/ย่อ';
-        });
-      }
-
-      /* ===== Render ===== */
-      function renderDay(day){
-        currentDay=day; expandedGeneral=null;
-        dayBtns.forEach(b=>b.setAttribute('data-active', String(b.dataset.day===day)));
-        canvas.querySelectorAll('.session').forEach(n=>n.remove());
-
-        const showAll=activeCats.has('all')||activeCats.size===0;
-        const list=NDATA.filter(d => d.day===day && (showAll || activeCats.has(d.catSlug)));
-
-        const created=[];
-        list.forEach(d=>{
-          const s=clamp(toMin(d.start), dayStartMin, dayEndMin);
-          const e=clamp(toMin(d.end),   dayStartMin, dayEndMin);
-          const w=Math.max(60,(e-s)*PX_PER_MIN);
-          const x=(s-dayStartMin)*PX_PER_MIN;
-
-          const el=document.createElement('article');
-          el.className=`session cat-${d.catSlug}`;
-          el.style.left=x+'px'; el.style.width=w+'px';
-          el.setAttribute('data-cat', d.catSlug);
-          el.setAttribute('aria-label', `${d.title} (${d.start}-${d.end})`);
-          el.innerHTML=`
-            <div class="text-xs text-slate-500">${d.start}–${d.end} • <span class="badge">${labelOf(d.catSlug)}</span></div>
-            <h3 class="text-sm md:text-base font-extrabold mt-1">${d.title}</h3>
-            <p class="text-xs md:text-sm text-slate-700">${d.subtitle || ''}</p>
-            ${d.detail?.length ? `<ul class="mt-2 text-xs md:text-sm text-slate-800 space-y-1">${d.detail.map(li=>`<li>• ${li}</li>`).join('')}</ul>`:''}
-          `;
-          canvas.appendChild(el);
-          created.push(el);
-        });
-
-        drawGrid();
-        layoutRows(created);
-        attachGeneralExpandHandlers(created);
-      }
-
-      /* ===== Filters ===== */
-      function setAll(active){ activeCats.clear(); if(active) activeCats.add('all'); chips.forEach(c=>c.setAttribute('data-active', String(active && c.dataset.filter==='all'))); }
-      function toggleCat(cat){
-        if(cat==='all'){ setAll(true); renderDay(currentDay); return; }
-        activeCats.delete('all');
-        activeCats.has(cat) ? activeCats.delete(cat) : activeCats.add(cat);
-        if(activeCats.size===0){ setAll(true); }
-        chips.forEach(c=>{ const f=c.dataset.filter; c.setAttribute('data-active', String(activeCats.has('all') ? f==='all' : activeCats.has(f))); });
-        renderDay(currentDay);
-      }
-      chips.forEach(chip=> chip.addEventListener('click', ()=> toggleCat(chip.dataset.filter)));
-
-      /* ===== Tabs/Scroll/Zoom ===== */
-      dayBtns.forEach(btn=> btn.addEventListener('click', ()=> renderDay(btn.dataset.day)));
-      btnL.addEventListener('click', ()=> rail.scrollBy({left:-400,behavior:'smooth'}));
-      btnR.addEventListener('click', ()=> rail.scrollBy({left: 400,behavior:'smooth'}));
-      btnNow.addEventListener('click', ()=> rail.scrollTo({left:0,behavior:'smooth'}));
-
-      function setZoom(px){ PX_PER_MIN=Math.min(PX_MAX,Math.max(PX_MIN,px)); updateZoomLabel(); preserveScrollDuring(()=> renderDay(currentDay)); }
-      zOut.addEventListener('click', ()=> setZoom(PX_PER_MIN-0.5));
-      zIn .addEventListener('click', ()=> setZoom(PX_PER_MIN+0.5));
-      z1x .addEventListener('click', ()=> setZoom(PX_DEFAULT));
-
-      addEventListener('view:changed', (e)=>{ if(e.detail?.route==='speakers'){ setTimeout(()=>{ preserveScrollDuring(()=> renderDay(currentDay)); }, 50); } });
-
-      updateZoomLabel();
-      renderDay(currentDay);
-
-      rail.addEventListener('scroll', ()=> { window.updateStageHeight && window.updateStageHeight(); });
-      addEventListener('resize', ()=> { window.updateStageHeight && window.updateStageHeight(); });
-    })();
-  </script>
-</body>
-</html>
+        uppergi: ['upper gi','ugi','upper gastrointestinal','upper-g
